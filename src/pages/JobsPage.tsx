@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Plus, Search, Filter, Pencil, Trash2, ExternalLink, X } from 'lucide-react'
+import { Plus, Search, Filter, Pencil, Trash2, ExternalLink, X, Sparkles } from 'lucide-react'
 import { useJobs } from '@/context/JobContext'
 import { Job, JOB_STATUSES, type JobStatus } from '@/types'
+import { AIToolsPanel } from '@/components/ai/AIToolsPanel'
 
 /* ─── Job Form Modal ──────────────────────────────────── */
 
@@ -183,6 +184,7 @@ export function JobsPage() {
   const [showForm, setShowForm] = useState(false)
   const [editJob, setEditJob] = useState<Job | undefined>()
   const [deleteJob, setDeleteJob] = useState<Job | undefined>()
+  const [aiJob, setAiJob] = useState<Job | undefined>()
 
   const handleEdit = (job: Job) => {
     setEditJob(job)
@@ -305,6 +307,9 @@ export function JobsPage() {
                   </td>
                   <td className="px-5 py-3.5">
                     <div className="flex items-center gap-1">
+                      <button onClick={() => setAiJob(job)} className="p-1.5 rounded-lg transition-all hover:opacity-70" style={{ color: 'var(--color-primary)' }} title="AI Assistant">
+                        <Sparkles size={14} />
+                      </button>
                       <button onClick={() => handleEdit(job)} className="p-1.5 rounded-lg transition-all hover:opacity-70" style={{ color: 'var(--color-on-surface-variant)' }} title="Edit">
                         <Pencil size={14} />
                       </button>
@@ -336,6 +341,7 @@ export function JobsPage() {
       {/* Modals */}
       {showForm && <JobFormModal job={editJob} onClose={() => { setShowForm(false); setEditJob(undefined) }} />}
       {deleteJob && <DeleteModal job={deleteJob} onConfirm={confirmDelete} onClose={() => setDeleteJob(undefined)} />}
+      {aiJob && <AIToolsPanel job={aiJob} onClose={() => setAiJob(undefined)} />}
     </div>
   )
 }
