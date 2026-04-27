@@ -61,6 +61,48 @@ dimensions:
 - **Emerald gradients**: `primary-container` → `primary` at 135° angle (never flat fills)
 - **Glass Stroke**: Premium cards get 1px inner-border using `white` at 10% opacity
 
+### Light Mode — "Executive White"
+For corporate environments that prefer bright, boardroom-clean aesthetics:
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `surface` | `#FAFBFC` | Base layer / page background |
+| `surface-container-lowest` | `#FFFFFF` | Deepest layer, card backgrounds |
+| `surface-container-low` | `#F3F4F6` | Sidebar, structural sections |
+| `surface-container` | `#EBEDF0` | Standard cards |
+| `surface-container-high` | `#E2E4E8` | Elevated elements, hover states |
+| `surface-container-highest` | `#D4D7DC` | Active/focused elements |
+| `on-surface` | `#111827` | Primary text (rich black, never pure #000) |
+| `on-surface-variant` | `#4B5563` | Secondary/muted text |
+| `outline` | `#D1D5DB` | Subtle borders |
+| `outline-variant` | `#E5E7EB` | Dividers |
+
+**Light mode adjustments:**
+- Glass stroke becomes `black` at 5% opacity (not white)
+- Shadows use `rgba(0,0,0,0.06)` with larger blur (subtle, not harsh)
+- Primary accent stays emerald but shifts to `#059669` for better contrast on white
+- Cards use subtle `box-shadow: 0 1px 3px rgba(0,0,0,0.04)` instead of tonal lift
+
+### Corporate Theme Palettes (Fortune 500)
+Pre-built palettes for enterprise feel. User selects in Settings.
+
+| Palette | Primary | Secondary | Vibe |
+|---------|---------|-----------|------|
+| **Emerald Executive** (default) | `#10B981` → `#4edea3` | `#3B82F6` | Tech/startup premium |
+| **Sapphire Corporate** | `#2563EB` → `#60A5FA` | `#6366F1` | Finance/consulting (Goldman, McKinsey) |
+| **Obsidian Slate** | `#64748B` → `#94A3B8` | `#475569` | Law/professional services |
+| **Royal Navy** | `#1E3A5F` → `#3B82F6` | `#0EA5E9` | Enterprise/defense (Lockheed, Boeing) |
+| **Burgundy & Gold** | `#991B1B` → `#DC2626` | `#D97706` | Banking/luxury (JP Morgan, LVMH) |
+
+Each palette overrides `primary`, `primary-container`, and `secondary` tokens while keeping the surface hierarchy intact.
+
+### Theme Switcher Component
+- Toggle in Settings page: Dark / Light / System
+- Palette selector: 5 preset palettes with color preview swatches
+- Persists choice in LocalStorage under `jobflow-theme`
+- Uses CSS custom properties (`--color-surface`, etc.) on `:root`
+- Transition: 200ms `background-color, color` on `body` for smooth switch
+
 ## 2. Typography
 
 **Font**: Inter (Google Fonts) — editorial intent, not utilitarian
