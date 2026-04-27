@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { JobProvider } from '@/context/JobContext'
 import { Layout } from '@/components/layout/Layout'
 import { DashboardPage } from '@/pages/DashboardPage'
 import { JobsPage } from '@/pages/JobsPage'
@@ -21,9 +22,11 @@ function App() {
   }
 
   return (
-    <Layout activePage={activePage} onNavigate={setActivePage}>
-      {renderPage()}
-    </Layout>
+    <JobProvider>
+      <Layout activePage={activePage} onNavigate={setActivePage}>
+        {renderPage()}
+      </Layout>
+    </JobProvider>
   )
 }
 
