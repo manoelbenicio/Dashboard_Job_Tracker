@@ -81,6 +81,7 @@ interface JobContextType {
   state: JobState
   dispatch: React.Dispatch<JobAction>
   filteredJobs: Job[]
+  userUid: string
 }
 
 const JobContext = createContext<JobContextType | null>(null)
@@ -93,18 +94,18 @@ export function useJobs() {
 
 /* ─── Provider ─────────────────────────────────────────── */
 
-export function JobProvider({ children }: { children: ReactNode }) {
+export function JobProvider({ children, userUid }: { children: ReactNode; userUid: string }) {
   const [state, dispatch] = useReducer(jobReducer, {
-    jobs: loadJobs(),
-    profile: loadProfile(),
+    jobs: loadJobs(userUid),
+    profile: loadProfile(userUid),
     searchQuery: '',
     statusFilter: 'all',
     originFilter: 'all',
   })
 
-  // Persist on change
-  useEffect(() => { saveJobs(state.jobs) }, [state.jobs])
-  useEffect(() => { saveProfile(state.profile) }, [state.profile])
+  // Persist on change — scoped to user UID
+  useEffect(() => { saveJobs(state.jobs, userUid) }, [state.jobs, userUid])
+  useEffect(() => { saveProfile(state.profile, userUid) }, [state.profile, userUid])
 
   // Compute filtered jobs
   const filteredJobs = state.jobs.filter(job => {
@@ -123,7 +124,7 @@ export function JobProvider({ children }: { children: ReactNode }) {
   })
 
   return (
-    <JobContext.Provider value={{ state, dispatch, filteredJobs }}>
+    <JobContext.Provider value={{ state, dispatch, filteredJobs, userUid }}>
       {children}
     </JobContext.Provider>
   )

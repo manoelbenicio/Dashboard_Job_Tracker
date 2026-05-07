@@ -6,9 +6,10 @@ interface LayoutProps {
   children: React.ReactNode
   activePage: string
   onNavigate: (page: string) => void
+  user?: any
 }
 
-export function Layout({ children, activePage, onNavigate }: LayoutProps) {
+export function Layout({ children, activePage, onNavigate, user }: LayoutProps) {
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
     const saved = localStorage.getItem('jobflow-theme')
     return (saved as 'dark' | 'light') || 'dark'
@@ -25,7 +26,7 @@ export function Layout({ children, activePage, onNavigate }: LayoutProps) {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar activePage={activePage} onNavigate={onNavigate} />
+      <Sidebar activePage={activePage} onNavigate={onNavigate} user={user} />
 
       <div className="main-content flex-1">
         {/* Top Bar */}

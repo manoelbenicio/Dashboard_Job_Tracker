@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment secrets
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+
+# Firebase cache
+.firebase/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large/sensitive files
+google-cloud-cli.zip
+gcloud_temp/
+system_card.txt
+*.pdf
+
+# Skills reference docs (not app source)
+data_expert_skills/
+
+# Planning artifacts
+.planning/
+
+# Misc docs
+JOBFLOW_PROMPT.md
+PRD_TEMPLATE.md
+PRINCIPAL_PROMPT.md
+SYSTEM_PROMPT.md
+Web_Spec_Driven_APP
+
+# Temp scripts (not part of app)
+*.py
+request.json

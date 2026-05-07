@@ -102,14 +102,79 @@
 
 ---
 
+### Phase 8: Firebase Project Setup & SDK Configuration
+**Goal**: Create a Firebase project, register a web app, enable Auth providers (Email/Password + Google Sign-In), and integrate the Firebase SDK into the Vite project with environment-based configuration.
+**Requirements**: FB-01, FB-02, FB-03
+**UI hint**: no
+**Depends on**: Phase 1 (project structure)
+
+**Success Criteria**:
+1. Firebase project created and web app registered
+2. Firebase SDK installed and `src/lib/firebase.ts` initializes correctly
+3. Auth providers (Email/Password + Google) enabled in Firebase Console
+4. Environment variables configured in `.env.local` (gitignored)
+5. `npm run build` succeeds with Firebase dependency
+
+---
+
+### Phase 9: Authentication UI & Auth Guards
+**Goal**: Build the login/register page with Email/Password + Google Sign-In, create AuthContext with `onAuthStateChanged`, add auth guards to the app shell, and scope data storage per user UID.
+**Requirements**: AUTH-01, AUTH-02, AUTH-03, AUTH-04, AUTH-05
+**UI hint**: yes
+**Depends on**: Phase 8 (Firebase SDK), Phase 3 (JobContext)
+
+**Success Criteria**:
+1. Login page renders with email/password form and Google Sign-In button
+2. User can create an account with email/password
+3. User can sign in with Google
+4. Unauthenticated users see only the login page
+5. Sidebar shows Firebase user data (name, avatar, email)
+6. Sign Out button works and returns to login
+7. Job data is scoped per user UID in LocalStorage
+
+---
+
+### Phase 10: Firebase Hosting Deployment
+**Goal**: Build the production bundle, configure Firebase Hosting with SPA rewrites, deploy to Firebase Hosting, and validate the live URL.
+**Requirements**: DEPLOY-01, DEPLOY-02, DEPLOY-03
+**UI hint**: no
+**Depends on**: Phase 9 (Auth complete), Phase 8 (Firebase project)
+
+**Success Criteria**:
+1. `npm run build` produces clean `dist/` folder
+2. `firebase.json` configured with SPA rewrites
+3. Deploy succeeds to `*.web.app` or `*.firebaseapp.com`
+4. Live URL loads login page
+5. Full auth flow works on deployed version
+6. Lighthouse audit passes accessibility + best practices
+
+---
+
 ## Progress
 
 | Phase | Name | Plans | Status |
 |-------|------|-------|--------|
-| 1 | Project Scaffolding & Design System | — | Planned |
-| 2 | Executive Dashboard | — | Planned |
-| 3 | Job Context & CRUD | — | Planned |
-| 4 | Kanban Board | — | Planned |
-| 5 | AI Cover Letter & Interview Guide | — | Planned |
-| 6 | Resume Builder & AI Avatar | — | Planned |
-| 7 | Claire — AI Career Companion | — | Planned |
+| 1 | Project Scaffolding & Design System | — | ✅ Done |
+| 2 | Executive Dashboard | — | ✅ Done |
+| 3 | Job Context & CRUD | — | ✅ Done |
+| 4 | Kanban Board | — | ✅ Done |
+| 5 | AI Cover Letter & Interview Guide | — | ✅ Done |
+| 6 | Resume Builder & AI Avatar | — | ✅ Done |
+| 7 | Claire — AI Career Companion | — | ✅ Done |
+| 8 | Firebase Project Setup & SDK | — | ✅ Done |
+| 9 | Authentication UI & Auth Guards | — | ✅ Done |
+| 10 | Firebase Hosting Deployment | — | ✅ Done |
+
+---
+
+## Backlog (999.x — Future Enhancements)
+
+### 999.1 — LinkedIn URL Auto-Import
+**Description**: Allow users to paste a LinkedIn job URL (mobile or desktop) and automatically extract all job details (company, role, location, salary range, description) using web scraping or AI-powered extraction. Eliminates manual data entry.
+**Value**: High — saves significant time during active job hunting sessions
+**Complexity**: Medium — requires URL parsing, data extraction (Gemini multimodal or scraping proxy), and mapping to Job schema
+
+### 999.2 — Interview Calendar Integration
+**Description**: When a job's status changes to "Interview", automatically trigger an email with all job details formatted to create a calendar block in Outlook and Gmail. Could use `.ics` file attachment or Google Calendar API / Microsoft Graph API integration.
+**Value**: High — prevents scheduling conflicts and ensures preparation time is blocked
+**Complexity**: Medium-High — requires email sending service (Firebase Functions or SendGrid) and calendar API integration

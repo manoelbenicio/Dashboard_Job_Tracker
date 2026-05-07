@@ -7,8 +7,11 @@ import {
   Settings,
   ChevronLeft,
   Sparkles,
+  LogOut,
+  BarChart3,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useAuth } from '@/context/AuthContext'
 
 interface NavItem {
   id: string
@@ -22,16 +25,24 @@ const navItems: NavItem[] = [
   { id: 'jobs', label: 'Jobs', icon: Briefcase, path: 'jobs' },
   { id: 'kanban', label: 'Kanban Board', icon: Kanban, path: 'kanban' },
   { id: 'resume', label: 'Resume Builder', icon: FileText, path: 'resume' },
+  { id: 'analytics', label: 'Analytics', icon: BarChart3, path: 'analytics' },
   { id: 'settings', label: 'Settings', icon: Settings, path: 'settings' },
 ]
 
 interface SidebarProps {
   activePage: string
   onNavigate: (page: string) => void
+  user?: any
 }
 
-export function Sidebar({ activePage, onNavigate }: SidebarProps) {
+export function Sidebar({ activePage, onNavigate, user }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false)
+  const { logout } = useAuth()
+
+  const userName = user?.displayName || user?.email?.split('@')[0] || 'User'
+  const userEmail = user?.email || ''
+  const userInitial = userName.charAt(0).toUpperCase()
+  const userPhoto = user?.photoURL
 
   return (
     <aside
@@ -120,27 +131,46 @@ export function Sidebar({ activePage, onNavigate }: SidebarProps) {
         {!collapsed && <span className="text-label-md">Collapse</span>}
       </button>
 
-      {/* User Avatar */}
+      {/* User Profile */}
       <div
         className="mt-4 pt-4 flex items-center gap-3"
         style={{ borderTop: '1px solid var(--color-surface-container)' }}
       >
-        <div
-          className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold"
-          style={{
-            background: 'var(--gradient-primary)',
-            color: 'var(--color-on-primary)',
-          }}
-        >
-          U
-        </div>
-        {!collapsed && (
-          <div>
-            <p className="text-sm font-medium" style={{ color: 'var(--color-on-surface)' }}>
-              User
-            </p>
-            <p className="text-label-md">Free Plan</p>
+        {userPhoto ? (
+          <img
+            src={userPhoto}
+            alt={userName}
+            className="w-8 h-8 rounded-full object-cover"
+            referrerPolicy="no-referrer"
+          />
+        ) : (
+          <div
+            className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold shrink-0"
+            style={{
+              background: 'var(--gradient-primary)',
+              color: 'var(--color-on-primary)',
+            }}
+          >
+            {userInitial}
           </div>
+        )}
+        {!collapsed && (
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium truncate" style={{ color: 'var(--color-on-surface)' }}>
+              {userName}
+            </p>
+            <p className="text-label-md truncate" style={{ fontSize: '10px' }}>{userEmail}</p>
+          </div>
+        )}
+        {!collapsed && (
+          <button
+            onClick={logout}
+            className="p-1.5 rounded-lg hover:opacity-70 transition-all shrink-0"
+            style={{ color: 'var(--color-on-surface-variant)' }}
+            title="Sign Out"
+          >
+            <LogOut size={14} />
+          </button>
         )}
       </div>
     </aside>

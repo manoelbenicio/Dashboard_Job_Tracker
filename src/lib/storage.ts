@@ -2,16 +2,18 @@ import { Job, UserProfile, DEFAULT_PROFILE } from '@/types'
 import { generateId } from '@/lib/utils'
 
 const STORAGE_KEYS = {
-  jobs: 'jobflow-jobs',
-  profile: 'jobflow-profile',
   theme: 'jobflow-theme',
   palette: 'jobflow-palette',
 } as const
 
-/** Load jobs from LocalStorage */
-export function loadJobs(): Job[] {
+function userKey(base: string, uid?: string) {
+  return uid ? `jobflow-${uid}-${base}` : `jobflow-${base}`
+}
+
+/** Load jobs from LocalStorage (scoped per user) */
+export function loadJobs(uid?: string): Job[] {
   try {
-    const raw = localStorage.getItem(STORAGE_KEYS.jobs)
+    const raw = localStorage.getItem(userKey('jobs', uid))
     return raw ? JSON.parse(raw) : getSeedJobs()
   } catch {
     return getSeedJobs()
@@ -19,14 +21,14 @@ export function loadJobs(): Job[] {
 }
 
 /** Save jobs to LocalStorage */
-export function saveJobs(jobs: Job[]): void {
-  localStorage.setItem(STORAGE_KEYS.jobs, JSON.stringify(jobs))
+export function saveJobs(jobs: Job[], uid?: string): void {
+  localStorage.setItem(userKey('jobs', uid), JSON.stringify(jobs))
 }
 
 /** Load user profile */
-export function loadProfile(): UserProfile {
+export function loadProfile(uid?: string): UserProfile {
   try {
-    const raw = localStorage.getItem(STORAGE_KEYS.profile)
+    const raw = localStorage.getItem(userKey('profile', uid))
     return raw ? JSON.parse(raw) : DEFAULT_PROFILE
   } catch {
     return DEFAULT_PROFILE
@@ -34,8 +36,8 @@ export function loadProfile(): UserProfile {
 }
 
 /** Save user profile */
-export function saveProfile(profile: UserProfile): void {
-  localStorage.setItem(STORAGE_KEYS.profile, JSON.stringify(profile))
+export function saveProfile(profile: UserProfile, uid?: string): void {
+  localStorage.setItem(userKey('profile', uid), JSON.stringify(profile))
 }
 
 /** Export all data as JSON string */
