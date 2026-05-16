@@ -1,6 +1,18 @@
-# JobFlow — v1 Requirements
+# JobFlow — Requirements
 
-## v1 Requirements
+## Milestone v2.0: Executive Benchmark Intelligence Dashboard
+
+### Benchmark Visualization (DASH-V2)
+- [ ] **DASH-V2-01**: Executive Dashboard layout specifically for Benchmark Results, matching Fortune 500 premium aesthetics.
+- [ ] **DASH-V2-02**: Interactive Radar/Spider chart mapping the 8 Phase 1 categories against global benchmarks.
+- [ ] **DASH-V2-03**: Visual Market Position Map (Phase 2) showing candidate vs Fortune 100/Big Tech/Consulting.
+- [ ] **DASH-V2-04**: Distinctiveness Heatmap or highlight cards (Phase 3).
+- [ ] **DASH-V2-05**: Risk Matrix visualization with severity indicators (Phase 4).
+- [ ] **DASH-V2-06**: Dominance Probability Gauge/Meter with global ranking (Phase 6).
+- [ ] **DASH-V2-07**: Interactive Gap Analysis visualization showing current vs target state (Phase 8).
+- [ ] **DASH-V2-08**: Use dynamic KPI cards integrated with `data_expert_skills` metrics to provide deep insights.
+
+## v1 Requirements (Completed)
 
 ### Design System & Layout
 - [x] **DS-01**: App renders with dark mode glassmorphism design system (#0F1117 base, Inter font, 16px rounded cards)
@@ -81,6 +93,21 @@
 - [ ] **RES-03**: AI resume parser — image/PDF → structured data
 - [ ] **AVA-01-03**: AI avatar generator — selfie → professional headshot
 
+### Executive Benchmark Engine (Phase 11)
+- [x] **BENCH-01**: Phase 1 — Market Positioning Score (8 categories, weighted, 0-100)
+- [ ] **BENCH-02**: Phase 2 — Benchmark Comparativo (vs Fortune 100, Big Tech, Tier 1)
+- [ ] **BENCH-03**: Phase 3 — Análise de Distintividade (commodity assessment, differentiators)
+- [ ] **BENCH-04**: Phase 4 — Riscos de Posicionamento (risk matrix with severity)
+- [ ] **BENCH-05**: Phase 5 — Reposicionamento Estratégico (action plan)
+- [ ] **BENCH-06**: Phase 6 — Probabilidade de Dominância (win probability)
+- [ ] **BENCH-07**: Phase 7 — CV Premium Rewrite (DOCX download)
+- [ ] **BENCH-08**: Phase 8 — Re-Avaliação & Gaps (new score, gap analysis)
+
+### Multi-Provider AI Support (Phase 12)
+- [x] **PROV-01**: Settings page with both Gemini and OpenAI API key fields
+- [x] **PROV-02**: Provider abstraction layer (aiProviders.ts) with automatic fallback
+- [x] **PROV-03**: Adaptive rate limit strategy with exponential backoff
+
 ## Out of Scope
 - Backend server/database — v1 is fully client-side (UID-scoped LocalStorage)
 - Job board scraping — legal complexity
@@ -104,3 +131,7 @@
 | AUTH-01 to AUTH-05 | Phase 9 | ✅ Done |
 | DEPLOY-01 to DEPLOY-03 | Phase 10 | ✅ Done |
 | BL-01, BL-02 | Backlog | 📋 Planned |
+| BENCH-01 | Phase 11 | ✅ Done |
+| BENCH-02 to BENCH-08 | Phase 11 | 🔄 In Progress |
+| PROV-01 to PROV-03 | Phase 12 | ✅ Done |
+| DASH-V2-01 to DASH-V2-08 | Phase 13-16 | 📋 Planned |

@@ -1,0 +1,32 @@
+services:
+  jobflow-docling-api:
+    container_name: jobflow-docling-api
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./backend/app:/app/app
+      - jobflow-docling-tmp:/tmp/docling
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    labels:
+      project: "JOBFLOW"
+      component: "docling-api"
+      description: "JobFlow Docling document conversion and job scraping API"
+    networks:
+      - jobflow-network
+
+volumes:
+  jobflow-docling-tmp:
+    name: jobflow-docling-tmp
+    labels:
+      project: "JOBFLOW"
+
+networks:
+  jobflow-network:
+    name: jobflow-network
+    labels:
+      project: "JOBFLOW"

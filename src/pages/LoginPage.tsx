@@ -1,31 +1,80 @@
-import { useState, useEffect } from 'react'
-import { Mail, Lock, Eye, EyeOff, User, AlertCircle, Loader2, ArrowRight, Briefcase, TrendingUp, Shield, Sparkles } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { Mail, Lock, Eye, EyeOff, User, AlertCircle, Loader2, ArrowRight, Shield } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { analytics } from '@/lib/analytics'
 
-/* ─── Floating Orb ─── */
-function Orb({ color, size, x, y, delay }: { color: string; size: number; x: string; y: string; delay: number }) {
-  return (
-    <div className="absolute rounded-full pointer-events-none"
-      style={{ width: size, height: size, left: x, top: y, background: `radial-gradient(circle, ${color} 0%, transparent 70%)`, filter: 'blur(60px)', opacity: 0.45, animation: `orbFloat 14s ease-in-out ${delay}s infinite alternate` }}
-    />
-  )
+/* ─── Geodesic Canvas Background ─── */
+function HeroCanvas() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    let animationId: number
+    let time = 0
+
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * window.devicePixelRatio
+      canvas.height = canvas.offsetHeight * window.devicePixelRatio
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
+    }
+    resize()
+    window.addEventListener('resize', resize)
+
+    const draw = () => {
+      const w = canvas.offsetWidth
+      const h = canvas.offsetHeight
+      ctx.clearRect(0, 0, w, h)
+      time += 0.003
+
+      // Draw floating nodes
+      const nodes: { x: number; y: number }[] = []
+      for (let i = 0; i < 40; i++) {
+        const x = (Math.sin(time + i * 0.7) * 0.35 + 0.5) * w + Math.cos(time * 0.5 + i * 1.3) * 40
+        const y = (Math.cos(time * 0.8 + i * 0.5) * 0.35 + 0.5) * h + Math.sin(time * 0.7 + i * 0.9) * 30
+        nodes.push({ x, y })
+
+        ctx.beginPath()
+        ctx.arc(x, y, 1.5, 0, Math.PI * 2)
+        ctx.fillStyle = 'rgba(0, 176, 189, 0.4)'
+        ctx.fill()
+      }
+
+      // Draw connections
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x
+          const dy = nodes[i].y - nodes[j].y
+          const dist = Math.sqrt(dx * dx + dy * dy)
+          if (dist < 150) {
+            ctx.beginPath()
+            ctx.moveTo(nodes[i].x, nodes[i].y)
+            ctx.lineTo(nodes[j].x, nodes[j].y)
+            ctx.strokeStyle = `rgba(0, 176, 189, ${0.08 * (1 - dist / 150)})`
+            ctx.lineWidth = 0.5
+            ctx.stroke()
+          }
+        }
+      }
+
+      animationId = requestAnimationFrame(draw)
+    }
+    draw()
+
+    return () => {
+      window.removeEventListener('resize', resize)
+      cancelAnimationFrame(animationId)
+    }
+  }, [])
+
+  return <canvas ref={canvasRef} className="indra-hero-canvas" />
 }
 
-/* ─── Feature Row ─── */
-function Feature({ icon: Icon, text, delay }: { icon: any; text: string; delay: number }) {
-  return (
-    <div className="flex items-center gap-3.5" style={{ animation: `slideUp 0.7s cubic-bezier(0.16,1,0.3,1) ${delay}s both` }}>
-      <div className="flex items-center justify-center w-9 h-9 rounded-xl" style={{ background: 'rgba(16,185,129,0.12)' }}>
-        <Icon size={16} style={{ color: '#4edea3' }} />
-      </div>
-      <span className="text-sm" style={{ color: 'rgba(255,255,255,0.65)', letterSpacing: '0.01em' }}>{text}</span>
-    </div>
-  )
-}
-
-/* ─── Animated Stat ─── */
-function Stat({ value, label, suffix = '', delay }: { value: number; label: string; suffix?: string; delay: number }) {
+/* ─── Animated KPI Stat ─── */
+function KpiStat({ value, label, suffix = '', delay }: { value: number; label: string; suffix?: string; delay: number }) {
   const [n, setN] = useState(0)
   useEffect(() => {
     const t = setTimeout(() => {
@@ -39,15 +88,30 @@ function Stat({ value, label, suffix = '', delay }: { value: number; label: stri
     }, delay)
     return () => clearTimeout(t)
   }, [value, delay])
+
   return (
-    <div style={{ animation: `slideUp 0.6s cubic-bezier(0.16,1,0.3,1) ${delay / 1000}s both` }}>
-      <div className="text-2xl font-bold tracking-tight" style={{ color: '#e2e2eb', fontFamily: 'var(--font-mono, "JetBrains Mono", monospace)' }}>
-        {n}{suffix}
-      </div>
-      <div className="text-[10px] mt-0.5 uppercase tracking-[0.15em] font-medium" style={{ color: 'rgba(255,255,255,0.3)' }}>{label}</div>
+    <div className="indra-glass-card" style={{ animationDelay: `${delay}ms` }}>
+      <p className="indra-kpi-label">{label}</p>
+      <p className="indra-kpi-value">{n}{suffix}</p>
     </div>
   )
 }
+
+/* ─── Feature Bullet ─── */
+function Feature({ text, delay }: { text: string; delay: string }) {
+  return (
+    <div className="indra-feature" style={{ animationDelay: delay }}>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00B0BD" strokeWidth="1.5">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      <span>{text}</span>
+    </div>
+  )
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/*  LOGIN PAGE — Indra Corporate Design System v3.0          */
+/* ═══════════════════════════════════════════════════════════ */
 
 export function LoginPage() {
   const { login, signup, googleLogin } = useAuth()
@@ -65,8 +129,13 @@ export function LoginPage() {
     setError('')
     setLoading(true)
     try {
-      if (isSignUp) { await signup(email, password, displayName || email.split('@')[0]); analytics.track('auth', 'signup', email) }
-      else { await login(email, password); analytics.track('auth', 'login', email) }
+      if (isSignUp) {
+        await signup(email, password, displayName || email.split('@')[0])
+        analytics.track('auth', 'signup', email)
+      } else {
+        await login(email, password)
+        analytics.track('auth', 'login', email)
+      }
     } catch (err: any) {
       const c = err?.code || ''
       if (c === 'auth/user-not-found' || c === 'auth/invalid-credential') setError('Invalid email or password.')
@@ -74,202 +143,184 @@ export function LoginPage() {
       else if (c === 'auth/weak-password') setError('Password must be at least 6 characters.')
       else if (c === 'auth/invalid-email') setError('Please enter a valid email address.')
       else setError(err.message || 'Authentication failed.')
-    } finally { setLoading(false) }
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleGoogle = async () => {
     setError('')
     setLoading(true)
-    try { await googleLogin(); analytics.track('auth', 'google_login') } catch (err: any) {
+    try {
+      await googleLogin()
+      analytics.track('auth', 'google_login')
+    } catch (err: any) {
       if (err?.code !== 'auth/popup-closed-by-user') setError('Google sign-in failed. Please try again.')
-    } finally { setLoading(false) }
+    } finally {
+      setLoading(false)
+    }
   }
-
-  /* ─── Design system: surface_container_lowest for inputs ─── */
-  const fieldBase: React.CSSProperties = {
-    background: '#0c0e14',
-    border: `1px solid ${focused ? 'transparent' : 'rgba(60,74,66,0.15)'}`,
-    borderRadius: '10px',
-    color: '#e2e2eb',
-    fontSize: '14px',
-    fontFamily: 'var(--font-primary, Inter, sans-serif)',
-    padding: '12px 16px 12px 44px',
-    width: '100%',
-    outline: 'none',
-    transition: 'all 0.3s ease',
-  }
-
-  const fieldFocused = (f: string): React.CSSProperties => ({
-    ...fieldBase,
-    border: focused === f ? '1px solid rgba(78,222,163,0.4)' : '1px solid rgba(60,74,66,0.15)',
-    boxShadow: focused === f ? '0 0 0 3px rgba(16,185,129,0.08)' : 'none',
-  })
-
-  const iconColor = (f: string) => focused === f ? '#4edea3' : 'rgba(187,202,191,0.4)'
 
   return (
-    <div className="min-h-screen flex" style={{ background: '#0F1117' }}>
-      <style>{`
-        @keyframes orbFloat { 0%{transform:translate(0,0) scale(1)} 50%{transform:translate(25px,-15px) scale(1.08)} 100%{transform:translate(-15px,10px) scale(0.96)} }
-        @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes slideRight { from{opacity:0;transform:translateX(24px)} to{opacity:1;transform:translateX(0)} }
-        @keyframes logoIn { 0%{opacity:0;transform:scale(0.85) rotate(-8deg)} 100%{opacity:1;transform:scale(1) rotate(0)} }
-        @keyframes gridScroll { 0%{background-position:0 0} 100%{background-position:32px 32px} }
-        .login-field::placeholder { color: rgba(187,202,191,0.3); }
-        .goog-btn:hover { background: rgba(255,255,255,0.08) !important; }
-        .pri-btn:hover:not(:disabled) { box-shadow: 0 8px 28px rgba(16,185,129,0.35) !important; transform: translateY(-1px); }
-        .pri-btn:active:not(:disabled) { transform: translateY(0); }
-        .mode-link:hover { color: #4edea3 !important; }
-      `}</style>
+    <div className="indra-login-root">
+      {/* ═══ LEFT — Hero Panel ═══ */}
+      <div className="indra-hero-panel">
+        <HeroCanvas />
 
-      {/* ═══ LEFT — Brand Panel ═══ */}
-      <div className="hidden lg:flex flex-col justify-between flex-1 relative overflow-hidden p-14"
-        style={{ background: '#111319', borderRight: 'none' }}
-      >
-        {/* Grid */}
-        <div className="absolute inset-0 pointer-events-none" style={{
-          backgroundImage: 'radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)',
-          backgroundSize: '32px 32px',
-          animation: 'gridScroll 25s linear infinite',
-        }} />
+        {/* Radial gradient overlays */}
+        <div className="indra-hero-gradient" />
 
-        <Orb color="rgba(16,185,129,0.18)" size={320} x="5%" y="15%" delay={0} />
-        <Orb color="rgba(99,102,241,0.12)" size={260} x="55%" y="55%" delay={4} />
-        <Orb color="rgba(59,130,246,0.08)" size={200} x="25%" y="75%" delay={7} />
+        <div className="indra-hero-content">
+          {/* Eyebrow */}
+          <p className="indra-eyebrow">DSS-JOBFLOW-2026 · EXECUTIVE TRACKER</p>
 
-        {/* Logo */}
-        <div className="relative z-10" style={{ animation: 'logoIn 0.9s cubic-bezier(0.16,1,0.3,1) both' }}>
-          <div className="flex items-center gap-3.5">
-            <div className="flex items-center justify-center w-12 h-12 rounded-2xl"
-              style={{ background: 'linear-gradient(135deg, #10B981, #059669)', boxShadow: '0 8px 24px rgba(16,185,129,0.2)' }}>
-              <Briefcase size={20} color="#fff" />
-            </div>
-            <div>
-              <div className="text-lg font-bold tracking-tight" style={{ color: '#e2e2eb' }}>JobFlow</div>
-              <div className="text-[10px] uppercase tracking-[0.2em] font-semibold" style={{ color: 'rgba(78,222,163,0.6)' }}>Executive Tracker</div>
-            </div>
+          {/* Headline */}
+          <h1 className="indra-hero-headline">
+            Your Career,<br />
+            <span className="indra-text-cyan">Strategically Managed.</span>
+          </h1>
+
+          {/* Subtitle */}
+          <p className="indra-hero-subtitle">
+            Track applications, ace interviews, and land offers — with AI-powered
+            intelligence at every step. Built on the official corporate design standard.
+          </p>
+
+          {/* Feature list */}
+          <div className="indra-feature-list">
+            <Feature text="Executive Dashboard & Analytics" delay="0.4s" />
+            <Feature text="AI Cover Letters & Interview Prep" delay="0.5s" />
+            <Feature text="Secure & Private — Your Data, Your Control" delay="0.6s" />
           </div>
-        </div>
 
-        {/* Hero */}
-        <div className="relative z-10 space-y-10 -mt-8">
-          <div>
-            <h1 className="text-[2.75rem] font-extrabold leading-[1.1] tracking-[-0.02em]"
-              style={{ color: '#e2e2eb', animation: 'slideUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.15s both' }}>
-              Your career,<br />
-              <span style={{ background: 'linear-gradient(135deg, #10B981 0%, #3B82F6 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                strategically managed.
-              </span>
-            </h1>
-            <p className="text-sm mt-5 leading-relaxed max-w-sm" style={{ color: 'rgba(187,202,191,0.5)', animation: 'slideUp 0.8s cubic-bezier(0.16,1,0.3,1) 0.3s both' }}>
-              Track applications, ace interviews, and land offers — with AI-powered intelligence at every step. Designed for leaders who demand precision.
-            </p>
+          {/* KPI row */}
+          <div className="indra-kpi-row">
+            <KpiStat value={10} label="PHASES BUILT" delay={1100} />
+            <KpiStat value={6} label="AI FEATURES" suffix="+" delay={1300} />
+            <KpiStat value={100} label="SECURE" suffix="%" delay={1500} />
           </div>
-          <div className="space-y-4">
-            <Feature icon={TrendingUp} text="Executive Dashboard & Analytics" delay={0.45} />
-            <Feature icon={Sparkles} text="AI Cover Letters & Interview Prep" delay={0.55} />
-            <Feature icon={Shield} text="Secure & Private — Your Data, Your Control" delay={0.65} />
-          </div>
-        </div>
-
-        {/* Stats */}
-        <div className="relative z-10 flex gap-14" style={{ animation: 'slideUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.9s both' }}>
-          <Stat value={10} label="Phases Built" delay={1100} />
-          <Stat value={6} label="AI Features" suffix="+" delay={1300} />
-          <Stat value={100} label="Secure" suffix="%" delay={1500} />
         </div>
       </div>
 
       {/* ═══ RIGHT — Auth Form ═══ */}
-      <div className="flex-1 lg:max-w-[480px] flex items-center justify-center px-8 sm:px-14 relative overflow-hidden"
-        style={{ background: '#0F1117' }}
-      >
-        <div className="w-full max-w-[360px] relative z-10" style={{ animation: 'slideRight 0.8s cubic-bezier(0.16,1,0.3,1) 0.2s both' }}>
+      <div className="indra-form-panel">
+        <div className="indra-form-container">
           {/* Mobile logo */}
-          <div className="lg:hidden text-center mb-10">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl mb-3"
-              style={{ background: 'linear-gradient(135deg, #10B981, #059669)' }}>
-              <Briefcase size={20} color="#fff" />
-            </div>
-            <div className="text-lg font-bold" style={{ color: '#e2e2eb' }}>JobFlow</div>
+          <div className="indra-mobile-logo">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <path d="M14 2L2 8l12 6 12-6-12-6z" stroke="#00B0BD" strokeWidth="1.5" fill="none"/>
+              <path d="M2 20l12 6 12-6" stroke="#00B0BD" strokeWidth="1.5" fill="none"/>
+              <path d="M2 14l12 6 12-6" stroke="#00B0BD" strokeWidth="1.5" fill="none"/>
+            </svg>
+            <span className="indra-mobile-title">JobFlow</span>
           </div>
 
           {/* Header */}
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold tracking-[-0.02em]" style={{ color: '#e2e2eb' }}>
-              {isSignUp ? 'Create account' : 'Welcome back'}
+          <div className="indra-form-header">
+            <p className="indra-form-eyebrow">{isSignUp ? 'Get Started' : 'Welcome Back'}</p>
+            <h2 className="indra-form-heading">
+              {isSignUp ? (
+                <>Start your<br /><span className="indra-text-cyan">intelligent</span> job search</>
+              ) : (
+                <>Sign in to<br /><span className="indra-text-cyan">continue</span> your journey</>
+              )}
             </h2>
-            <p className="text-sm mt-1.5" style={{ color: 'rgba(187,202,191,0.45)' }}>
-              {isSignUp ? 'Start your intelligent job search' : 'Sign in to continue your journey'}
-            </p>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="indra-auth-form">
             {isSignUp && (
-              <div>
-                <label className="block text-[11px] uppercase tracking-[0.1em] font-semibold mb-2" style={{ color: 'rgba(187,202,191,0.5)' }}>Full Name</label>
-                <div className="relative">
-                  <User size={15} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: iconColor('name'), transition: 'color 0.3s' }} />
-                  <input className="login-field" style={fieldFocused('name')} type="text" value={displayName} onChange={e => setDisplayName(e.target.value)} placeholder="Your full name"
-                    onFocus={() => setFocused('name')} onBlur={() => setFocused('')} />
+              <div className="indra-form-field">
+                <label className="indra-form-label" htmlFor="login-name">Full Name</label>
+                <div className="indra-input-wrapper">
+                  <User size={15} className="indra-input-icon" style={{ color: focused === 'name' ? '#00B0BD' : '#7A9CAE' }} />
+                  <input
+                    id="login-name"
+                    className={`indra-form-input ${focused === 'name' ? 'indra-form-input--focused' : ''}`}
+                    type="text"
+                    value={displayName}
+                    onChange={e => setDisplayName(e.target.value)}
+                    placeholder="Your full name"
+                    onFocus={() => setFocused('name')}
+                    onBlur={() => setFocused('')}
+                  />
                 </div>
               </div>
             )}
 
-            <div>
-              <label className="block text-[11px] uppercase tracking-[0.1em] font-semibold mb-2" style={{ color: 'rgba(187,202,191,0.5)' }}>Email Address</label>
-              <div className="relative">
-                <Mail size={15} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: iconColor('email'), transition: 'color 0.3s' }} />
-                <input className="login-field" style={fieldFocused('email')} type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@company.com" required
-                  onFocus={() => setFocused('email')} onBlur={() => setFocused('')} />
+            <div className="indra-form-field">
+              <label className="indra-form-label" htmlFor="login-email">Email Address *</label>
+              <div className="indra-input-wrapper">
+                <Mail size={15} className="indra-input-icon" style={{ color: focused === 'email' ? '#00B0BD' : '#7A9CAE' }} />
+                <input
+                  id="login-email"
+                  className={`indra-form-input ${focused === 'email' ? 'indra-form-input--focused' : ''}`}
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder="you@company.com"
+                  required
+                  onFocus={() => setFocused('email')}
+                  onBlur={() => setFocused('')}
+                />
               </div>
             </div>
 
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-[11px] uppercase tracking-[0.1em] font-semibold" style={{ color: 'rgba(187,202,191,0.5)' }}>Password</label>
-                {!isSignUp && <button type="button" className="text-[11px] font-medium mode-link" style={{ color: 'rgba(78,222,163,0.6)' }}>Forgot Password?</button>}
+            <div className="indra-form-field">
+              <div className="indra-label-row">
+                <label className="indra-form-label" htmlFor="login-pass">Password *</label>
+                {!isSignUp && (
+                  <button type="button" className="indra-forgot-link">Forgot Password?</button>
+                )}
               </div>
-              <div className="relative">
-                <Lock size={15} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: iconColor('pass'), transition: 'color 0.3s' }} />
-                <input className="login-field" style={{ ...fieldFocused('pass'), paddingRight: 44 }} type={showPassword ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required minLength={6}
-                  onFocus={() => setFocused('pass')} onBlur={() => setFocused('')} />
-                <button type="button" onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 rounded-md"
-                  style={{ color: 'rgba(187,202,191,0.35)' }}>
+              <div className="indra-input-wrapper">
+                <Lock size={15} className="indra-input-icon" style={{ color: focused === 'pass' ? '#00B0BD' : '#7A9CAE' }} />
+                <input
+                  id="login-pass"
+                  className={`indra-form-input ${focused === 'pass' ? 'indra-form-input--focused' : ''}`}
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  minLength={6}
+                  onFocus={() => setFocused('pass')}
+                  onBlur={() => setFocused('')}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="indra-eye-btn"
+                >
                   {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
                 </button>
               </div>
             </div>
 
+            {/* Error message */}
             {error && (
-              <div className="flex items-start gap-2.5 px-4 py-3 rounded-xl text-sm" style={{ background: 'rgba(252,124,120,0.08)', color: '#ffb3af', border: '1px solid rgba(252,124,120,0.12)' }}>
-                <AlertCircle size={14} className="shrink-0 mt-0.5" />
+              <div className="indra-error-msg">
+                <AlertCircle size={14} />
                 <span>{error}</span>
               </div>
             )}
 
-            {/* PRIMARY: Sign In Button */}
-            <button type="submit" disabled={loading}
-              className="pri-btn w-full py-3 rounded-xl text-sm font-semibold transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2"
-              style={{ background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', color: '#fff', boxShadow: '0 4px 16px rgba(16,185,129,0.25)', letterSpacing: '0.02em' }}>
+            {/* Submit button — Indra Cyan */}
+            <button type="submit" disabled={loading} className="indra-btn-cyan indra-btn--form">
               {loading ? <Loader2 size={15} className="animate-spin" /> : <ArrowRight size={15} />}
               {isSignUp ? 'Create Account' : 'Sign In'}
             </button>
           </form>
 
           {/* Divider */}
-          <div className="flex items-center gap-4 my-5">
-            <div className="flex-1 h-px" style={{ background: 'rgba(60,74,66,0.2)' }} />
-            <span className="text-[10px] uppercase tracking-[0.15em] font-medium" style={{ color: 'rgba(187,202,191,0.2)' }}>or</span>
-            <div className="flex-1 h-px" style={{ background: 'rgba(60,74,66,0.2)' }} />
+          <div className="indra-divider">
+            <div className="indra-divider-line" />
+            <span className="indra-divider-text">OR</span>
+            <div className="indra-divider-line" />
           </div>
 
-          {/* SECONDARY: Google Button — BELOW Sign In */}
-          <button onClick={handleGoogle} disabled={loading}
-            className="goog-btn w-full flex items-center justify-center gap-3 py-3 rounded-xl text-sm font-medium transition-all duration-300 disabled:opacity-50"
-            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(60,74,66,0.15)', color: '#bbcabf' }}>
+          {/* Google button — Secondary style */}
+          <button onClick={handleGoogle} disabled={loading} className="indra-btn-secondary indra-btn--form">
             <svg width="16" height="16" viewBox="0 0 24 24">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
               <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -279,18 +330,21 @@ export function LoginPage() {
             Continue with Google
           </button>
 
-          {/* Toggle */}
-          <p className="text-center text-sm mt-6" style={{ color: 'rgba(187,202,191,0.35)' }}>
+          {/* Toggle sign in/up */}
+          <p className="indra-toggle-text">
             {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
-            <button onClick={() => { setIsSignUp(!isSignUp); setError('') }}
-              className="mode-link font-semibold transition-colors duration-200" style={{ color: '#4edea3' }}
-            >{isSignUp ? 'Sign In' : 'Sign Up'}</button>
+            <button
+              onClick={() => { setIsSignUp(!isSignUp); setError('') }}
+              className="indra-toggle-link"
+            >
+              {isSignUp ? 'Sign In' : 'Sign Up'}
+            </button>
           </p>
 
           {/* Footer */}
-          <div className="mt-10 flex items-center justify-center gap-2">
-            <Shield size={11} style={{ color: 'rgba(187,202,191,0.15)' }} />
-            <span className="text-[10px] uppercase tracking-[0.15em]" style={{ color: 'rgba(187,202,191,0.12)' }}>Secured by Firebase</span>
+          <div className="indra-auth-footer">
+            <Shield size={11} />
+            <span>Secured by Firebase</span>
           </div>
         </div>
       </div>

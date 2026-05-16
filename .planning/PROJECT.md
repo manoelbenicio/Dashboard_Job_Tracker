@@ -10,6 +10,17 @@ JobFlow is a premium, agentic job application tracker that combines an executive
 
 A user can track their job applications through a visually stunning, data-rich interface and receive AI-powered assistance (cover letters, resume analysis, interview prep, career coaching) at every stage of their job search — all behind secure Firebase Authentication and deployed to the cloud.
 
+## Current Milestone: v2.0 Executive Benchmark Intelligence Dashboard
+
+**Goal:** Transform the text-based benchmark engine output into a premium, interactive, Fortune 500-grade visual dashboard with radar charts, KPI cards, gap analysis, and risk heat maps.
+
+**Target features:**
+- Interactive Radar/Spider charts for Market Positioning Score
+- Visual Market Position mapping (vs Fortune 100/Big Tech)
+- Risk Matrix heatmaps and Dominance Probability gauges
+- Integration with `data_expert_skills` for dynamic KPI cards
+- Premium, highly-animated, C-level presentation of benchmark results
+
 ## Requirements
 
 ### Validated ✅
@@ -76,8 +87,20 @@ A user can track their job applications through a visually stunning, data-rich i
 
 ## Evolution
 
-All 10 phases complete. Project is deployed and live.
-Next evolution point: Backlog items 999.1 (LinkedIn Import) and 999.2 (Calendar Integration).
+This document evolves at phase transitions and milestone boundaries.
+
+**After each phase transition** (via `/gsd-transition`):
+1. Requirements invalidated? → Move to Out of Scope with reason
+2. Requirements validated? → Move to Validated with phase reference
+3. New requirements emerged? → Add to Active
+4. Decisions to log? → Add to Key Decisions
+5. "What This Is" still accurate? → Update if drifted
+
+**After each milestone** (via `/gsd-complete-milestone`):
+1. Full review of all sections
+2. Core Value check — still the right priority?
+3. Audit Out of Scope — reasons still valid?
+4. Update Context with current state
 
 ---
-*Last updated: 2026-04-27 — All phases complete, deployed to production*
+*Last updated: 2026-05-16 — Starting Milestone v2.0*

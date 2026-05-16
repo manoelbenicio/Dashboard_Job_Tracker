@@ -48,7 +48,7 @@ export async function generateCoverLetter(params: {
 7. Format as plain text, ready to send`
 
   const response = await client.models.generateContent({
-    model: 'gemini-2.5-flash',
+    model: 'gemini-3.1-pro-preview',
     contents: prompt,
   })
 
@@ -96,7 +96,7 @@ Provide 8-10 likely interview questions with brief suggested talking points for 
 Format with markdown headers and bullet points for readability.`
 
   const response = await client.models.generateContent({
-    model: 'gemini-2.5-flash',
+    model: 'gemini-3.1-pro-preview',
     contents: prompt,
   })
 

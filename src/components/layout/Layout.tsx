@@ -1,6 +1,5 @@
 import { Sidebar } from './Sidebar'
-import { Search, Bell, Sun, Moon } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { Bell } from 'lucide-react'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -9,82 +8,55 @@ interface LayoutProps {
   user?: any
 }
 
+const pageNames: Record<string, string> = {
+  dashboard: 'Executive Dashboard',
+  jobs: 'Job Applications',
+  kanban: 'Kanban Board',
+  resume: 'Resume Builder',
+  benchmark: 'Executive Benchmark',
+  analytics: 'Analytics',
+  settings: 'Settings',
+}
+
 export function Layout({ children, activePage, onNavigate, user }: LayoutProps) {
-  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    const saved = localStorage.getItem('jobflow-theme')
-    return (saved as 'dark' | 'light') || 'dark'
-  })
-
-  useEffect(() => {
-    document.documentElement.className = theme
-    localStorage.setItem('jobflow-theme', theme)
-  }, [theme])
-
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'dark' ? 'light' : 'dark')
-  }
+  const userName = user?.displayName || user?.email?.split('@')[0] || 'User'
+  const userInitial = userName.charAt(0).toUpperCase()
+  const userPhoto = user?.photoURL
 
   return (
-    <div className="flex min-h-screen">
+    <div className="indra-dash-shell">
       <Sidebar activePage={activePage} onNavigate={onNavigate} user={user} />
 
-      <div className="main-content flex-1">
+      <div className="indra-dash-main">
         {/* Top Bar */}
-        <header
-          className="flex items-center justify-between mb-8 animate-fade-in"
-        >
-          {/* Search */}
-          <div
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl flex-1 max-w-md"
-            style={{
-              background: 'var(--color-surface-container-low)',
-              border: '1px solid var(--color-surface-container)',
-            }}
-          >
-            <Search size={16} style={{ color: 'var(--color-on-surface-variant)' }} />
-            <input
-              type="text"
-              placeholder="Search applications, companies, or contacts..."
-              className="bg-transparent border-none outline-none flex-1 text-sm"
-              style={{
-                color: 'var(--color-on-surface)',
-                fontFamily: 'var(--font-primary)',
-              }}
-            />
-          </div>
-
-          {/* Actions */}
-          <div className="flex items-center gap-2 ml-4">
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-lg transition-all hover:opacity-80"
-              style={{
-                background: 'var(--color-surface-container)',
-                color: 'var(--color-on-surface-variant)',
-              }}
-              aria-label="Toggle theme"
-            >
-              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
-            <button
-              className="p-2 rounded-lg relative transition-all hover:opacity-80"
-              style={{
-                background: 'var(--color-surface-container)',
-                color: 'var(--color-on-surface-variant)',
-              }}
-              aria-label="Notifications"
-            >
+        <header className="indra-topbar">
+          <h1 className="indra-topbar-title">
+            JobFlow — {pageNames[activePage] || 'Dashboard'}
+          </h1>
+          <div className="indra-topbar-right">
+            {/* Notification */}
+            <div className="indra-notif-badge" title="Notifications">
               <Bell size={18} />
-              <span
-                className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full"
-                style={{ background: 'var(--color-primary)' }}
+              <span className="indra-notif-dot" />
+            </div>
+            {/* Avatar */}
+            {userPhoto ? (
+              <img
+                src={userPhoto}
+                alt={userName}
+                className="indra-avatar"
+                referrerPolicy="no-referrer"
               />
-            </button>
+            ) : (
+              <div className="indra-avatar" title={userName}>
+                {userInitial}
+              </div>
+            )}
           </div>
         </header>
 
         {/* Page Content */}
-        <main>
+        <main className="indra-dash-content">
           {children}
         </main>
       </div>

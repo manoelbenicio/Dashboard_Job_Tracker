@@ -9,9 +9,81 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+      /* ─── Pre-React Indra Loading Screen ─── */
+      body { margin: 0; background: #0F1117; }
+      #jobflow-preloader {
+        position: fixed; inset: 0; z-index: 9999;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center; gap: 24px;
+        background: #0F1117;
+      }
+      #jobflow-preloader .jf-logo {
+        width: 64px; height: 64px; display: flex;
+        align-items: center; justify-content: center;
+        background: linear-gradient(135deg, #003E50, #00B0BD);
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0,176,189,0.25);
+      }
+      #jobflow-preloader .jf-logo span {
+        font-size: 24px; font-weight: 800; color: #fff;
+        font-family: 'Inter', sans-serif;
+      }
+      #jobflow-preloader .jf-brand h1 {
+        font-size: 20px; font-weight: 700; color: #fff;
+        font-family: 'Inter', sans-serif;
+        margin: 0 0 4px 0; text-align: center;
+      }
+      #jobflow-preloader .jf-brand p {
+        font-size: 12px; color: #7A9CAE;
+        font-family: 'Inter', sans-serif;
+        margin: 0; letter-spacing: 0.1em;
+        text-transform: uppercase; text-align: center;
+      }
+      #jobflow-preloader .jf-bar {
+        width: 200px; height: 3px;
+        background: rgba(255,255,255,0.06);
+        border-radius: 2px; overflow: hidden;
+      }
+      #jobflow-preloader .jf-bar-inner {
+        width: 40%; height: 100%;
+        background: linear-gradient(90deg, transparent, #00B0BD, transparent);
+        border-radius: 2px;
+        animation: jf-loading 1.5s ease-in-out infinite;
+      }
+      @keyframes jf-loading {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(350%); }
+      }
+      /* Hide preloader once React mounts */
+      #root:not(:empty) + script ~ #jobflow-preloader,
+      .app-mounted #jobflow-preloader { display: none !important; }
+    </style>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <!-- Preloader — visible until React renders -->
+    <div id="jobflow-preloader">
+      <div class="jf-logo"><span>JF</span></div>
+      <div class="jf-brand">
+        <h1>JobFlow</h1>
+        <p>Executive Job Tracker</p>
+      </div>
+      <div class="jf-bar"><div class="jf-bar-inner"></div></div>
+    </div>
+    <script>
+      // Remove preloader once React mounts
+      const observer = new MutationObserver(() => {
+        const root = document.getElementById('root');
+        if (root && root.children.length > 0) {
+          const preloader = document.getElementById('jobflow-preloader');
+          if (preloader) preloader.style.display = 'none';
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.getElementById('root'), { childList: true });
+    </script>
   </body>
 </html>

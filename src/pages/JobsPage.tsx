@@ -1,28 +1,41 @@
 import { useState } from 'react'
-import { Plus, Search, Filter, Pencil, Trash2, ExternalLink, X, Sparkles } from 'lucide-react'
+import { Plus, Search, Filter, Pencil, Trash2, ExternalLink, X, Sparkles, Link2, Loader2, AlertCircle } from 'lucide-react'
 import { useJobs } from '@/context/JobContext'
 import { Job, JOB_STATUSES, type JobStatus } from '@/types'
 import { AIToolsPanel } from '@/components/ai/AIToolsPanel'
 
-/* ─── Job Form Modal ──────────────────────────────────── */
+const DOCLING_API = 'http://localhost:8001'
 
-interface JobFormProps {
-  job?: Job
-  onClose: () => void
+/* ─── Indra Form Input Style ─── */
+const fieldStyle: React.CSSProperties = {
+  background: 'transparent',
+  color: '#FFFFFF',
+  border: 'none',
+  borderBottom: '1px solid #B0B4BD',
+  padding: '12px 14px',
+  fontSize: '14px',
+  fontFamily: "'Inter', 'Segoe UI', sans-serif",
+  width: '100%',
+  outline: 'none',
+  transition: 'border-color 0.25s ease',
 }
 
-function JobFormModal({ job, onClose }: JobFormProps) {
+/* ─── Prefill type from URL scraper ─── */
+interface PrefillData { company?: string; role?: string; description?: string; salary?: string; location?: string; url?: string }
+
+/* ─── Job Form Modal ──────────────────────────────────── */
+function JobFormModal({ job, onClose, prefill }: { job?: Job; onClose: () => void; prefill?: PrefillData }) {
   const { dispatch } = useJobs()
   const isEdit = !!job
 
   const [form, setForm] = useState({
-    company: job?.company || '',
-    role: job?.role || '',
+    company: prefill?.company || job?.company || '',
+    role: prefill?.role || job?.role || '',
     status: job?.status || 'applied' as JobStatus,
-    salary: job?.salary || '',
-    location: job?.location || '',
-    description: job?.description || '',
-    url: job?.url || '',
+    salary: prefill?.salary || job?.salary || '',
+    location: prefill?.location || job?.location || '',
+    description: prefill?.description || job?.description || '',
+    url: prefill?.url || job?.url || '',
     origin: job?.origin || 'application' as Job['origin'],
     notes: job?.notes || '',
     coverLetter: job?.coverLetter || '',
@@ -33,117 +46,76 @@ function JobFormModal({ job, onClose }: JobFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!form.company || !form.role) return
-
     if (isEdit && job) {
-      dispatch({
-        type: 'UPDATE_JOB',
-        payload: { ...job, ...form, appliedDate: new Date(form.appliedDate).toISOString() },
-      })
+      dispatch({ type: 'UPDATE_JOB', payload: { ...job, ...form, appliedDate: new Date(form.appliedDate).toISOString() } })
     } else {
-      dispatch({
-        type: 'ADD_JOB',
-        payload: { ...form, appliedDate: new Date(form.appliedDate).toISOString() },
-      })
+      dispatch({ type: 'ADD_JOB', payload: { ...form, appliedDate: new Date(form.appliedDate).toISOString() } })
     }
     onClose()
   }
 
-  const fieldStyle = {
-    background: 'var(--color-surface-container-lowest)',
-    color: 'var(--color-on-surface)',
-    border: '1px solid var(--color-surface-container-high)',
-    borderRadius: 'var(--radius-md)',
-    padding: '10px 14px',
-    fontSize: '14px',
-    fontFamily: 'var(--font-primary)',
-    width: '100%',
-    outline: 'none',
-    transition: 'border-color var(--transition-fast)',
-  } as React.CSSProperties
-
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)' }}
-      onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
-    >
-      <div
-        className="w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-fade-in-up rounded-2xl"
-        style={{
-          background: 'var(--color-surface-container)',
-          border: '1px solid var(--glass-stroke)',
-          padding: 'var(--space-xl)',
-        }}
-      >
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-title" style={{ color: 'var(--color-on-surface)' }}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center"
+      style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose() }}>
+      <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto indra-panel" style={{ animation: 'indra-slide-up 0.3s ease-out' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+          <h2 style={{ fontSize: '20px', fontWeight: 300, color: '#FFFFFF' }}>
             {isEdit ? 'Edit Application' : 'New Application'}
           </h2>
-          <button onClick={onClose} className="p-1 rounded-lg hover:opacity-70" style={{ color: 'var(--color-on-surface-variant)' }}>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#7A9CAE', cursor: 'pointer' }}>
             <X size={20} />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
           <div className="col-span-2 sm:col-span-1">
-            <label className="text-label-md block mb-1.5">Company *</label>
+            <label className="indra-form-label">Company *</label>
             <input style={fieldStyle} value={form.company} onChange={e => setForm(f => ({ ...f, company: e.target.value }))} placeholder="e.g. Google" required />
           </div>
           <div className="col-span-2 sm:col-span-1">
-            <label className="text-label-md block mb-1.5">Role *</label>
+            <label className="indra-form-label">Role *</label>
             <input style={fieldStyle} value={form.role} onChange={e => setForm(f => ({ ...f, role: e.target.value }))} placeholder="e.g. Senior Engineer" required />
           </div>
           <div>
-            <label className="text-label-md block mb-1.5">Status</label>
-            <select style={fieldStyle} value={form.status} onChange={e => setForm(f => ({ ...f, status: e.target.value as JobStatus }))}>
-              {JOB_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+            <label className="indra-form-label">Status</label>
+            <select style={{ ...fieldStyle, cursor: 'pointer' }} value={form.status} onChange={e => setForm(f => ({ ...f, status: e.target.value as JobStatus }))}>
+              {JOB_STATUSES.map(s => <option key={s.value} value={s.value} style={{ background: '#003E50' }}>{s.label}</option>)}
             </select>
           </div>
           <div>
-            <label className="text-label-md block mb-1.5">Origin</label>
-            <select style={fieldStyle} value={form.origin} onChange={e => setForm(f => ({ ...f, origin: e.target.value as Job['origin'] }))}>
-              <option value="application">Application</option>
-              <option value="referral">Referral</option>
-              <option value="recruiter">Recruiter</option>
-              <option value="other">Other</option>
+            <label className="indra-form-label">Origin</label>
+            <select style={{ ...fieldStyle, cursor: 'pointer' }} value={form.origin} onChange={e => setForm(f => ({ ...f, origin: e.target.value as Job['origin'] }))}>
+              {['application','referral','recruiter','other'].map(o => <option key={o} value={o} style={{ background: '#003E50' }}>{o.charAt(0).toUpperCase()+o.slice(1)}</option>)}
             </select>
           </div>
           <div>
-            <label className="text-label-md block mb-1.5">Salary Range</label>
+            <label className="indra-form-label">Salary Range</label>
             <input style={fieldStyle} value={form.salary} onChange={e => setForm(f => ({ ...f, salary: e.target.value }))} placeholder="$120k - $180k" />
           </div>
           <div>
-            <label className="text-label-md block mb-1.5">Location</label>
+            <label className="indra-form-label">Location</label>
             <input style={fieldStyle} value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value }))} placeholder="San Francisco, CA" />
           </div>
           <div>
-            <label className="text-label-md block mb-1.5">Applied Date</label>
+            <label className="indra-form-label">Applied Date</label>
             <input style={fieldStyle} type="date" value={form.appliedDate} onChange={e => setForm(f => ({ ...f, appliedDate: e.target.value }))} />
           </div>
           <div>
-            <label className="text-label-md block mb-1.5">Job URL</label>
+            <label className="indra-form-label">Job URL</label>
             <input style={fieldStyle} value={form.url} onChange={e => setForm(f => ({ ...f, url: e.target.value }))} placeholder="https://..." />
           </div>
           <div className="col-span-2">
-            <label className="text-label-md block mb-1.5">Description</label>
+            <label className="indra-form-label">Description</label>
             <textarea style={{ ...fieldStyle, minHeight: '80px', resize: 'vertical' }} value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} placeholder="Brief job description..." />
           </div>
           <div className="col-span-2">
-            <label className="text-label-md block mb-1.5">Notes</label>
+            <label className="indra-form-label">Notes</label>
             <textarea style={{ ...fieldStyle, minHeight: '60px', resize: 'vertical' }} value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} placeholder="Personal notes..." />
           </div>
-
           <div className="col-span-2 flex gap-3 mt-2">
-            <button type="button" onClick={onClose}
-              className="flex-1 py-2.5 rounded-xl text-sm font-medium transition-all hover:opacity-80"
-              style={{ background: 'var(--color-surface-container-high)', color: 'var(--color-on-surface-variant)' }}>
-              Cancel
-            </button>
-            <button type="submit"
-              className="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all hover:opacity-90"
-              style={{ background: 'var(--gradient-primary)', color: 'var(--color-on-primary)' }}>
-              {isEdit ? 'Save Changes' : 'Add Application'}
-            </button>
+            <button type="button" onClick={onClose} className="indra-btn-secondary" style={{ flex: 1 }}>Cancel</button>
+            <button type="submit" className="indra-btn-cyan" style={{ flex: 1 }}>{isEdit ? 'Save Changes' : 'Add Application'}</button>
           </div>
         </form>
       </div>
@@ -152,25 +124,19 @@ function JobFormModal({ job, onClose }: JobFormProps) {
 }
 
 /* ─── Delete Confirmation Modal ───────────────────────── */
-
 function DeleteModal({ job, onConfirm, onClose }: { job: Job; onConfirm: () => void; onClose: () => void }) {
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)' }}
-      onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
-    >
-      <div
-        className="w-full max-w-md animate-fade-in-up rounded-2xl"
-        style={{ background: 'var(--color-surface-container)', border: '1px solid var(--glass-stroke)', padding: 'var(--space-xl)' }}
-      >
-        <h2 className="text-title mb-2" style={{ color: 'var(--color-on-surface)' }}>Delete Application</h2>
-        <p className="text-body mb-6" style={{ color: 'var(--color-on-surface-variant)' }}>
-          Are you sure you want to delete <strong>{job.role}</strong> at <strong>{job.company}</strong>? This cannot be undone.
+    <div className="fixed inset-0 z-50 flex items-center justify-center"
+      style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose() }}>
+      <div className="w-full max-w-md indra-panel" style={{ animation: 'indra-slide-up 0.3s ease-out' }}>
+        <h2 style={{ fontSize: '20px', fontWeight: 300, color: '#FFFFFF', marginBottom: '8px' }}>Delete Application</h2>
+        <p style={{ fontSize: '14px', color: '#B3C1DA', marginBottom: '24px', lineHeight: 1.5 }}>
+          Are you sure you want to delete <strong style={{ color: '#FFFFFF' }}>{job.role}</strong> at <strong style={{ color: '#FFFFFF' }}>{job.company}</strong>? This cannot be undone.
         </p>
         <div className="flex gap-3">
-          <button onClick={onClose} className="flex-1 py-2.5 rounded-xl text-sm font-medium" style={{ background: 'var(--color-surface-container-high)', color: 'var(--color-on-surface-variant)' }}>Cancel</button>
-          <button onClick={onConfirm} className="flex-1 py-2.5 rounded-xl text-sm font-semibold" style={{ background: '#EF4444', color: '#fff' }}>Delete</button>
+          <button onClick={onClose} className="indra-btn-secondary" style={{ flex: 1 }}>Cancel</button>
+          <button onClick={onConfirm} className="indra-btn-cyan" style={{ flex: 1, background: '#E91E63' }}>Delete</button>
         </div>
       </div>
     </div>
@@ -178,148 +144,179 @@ function DeleteModal({ job, onConfirm, onClose }: { job: Job; onConfirm: () => v
 }
 
 /* ─── Jobs Page ───────────────────────────────────────── */
-
 export function JobsPage() {
   const { state, dispatch, filteredJobs } = useJobs()
   const [showForm, setShowForm] = useState(false)
   const [editJob, setEditJob] = useState<Job | undefined>()
   const [deleteJob, setDeleteJob] = useState<Job | undefined>()
   const [aiJob, setAiJob] = useState<Job | undefined>()
+  const [jobUrl, setJobUrl] = useState('')
+  const [urlLoading, setUrlLoading] = useState(false)
+  const [urlError, setUrlError] = useState('')
+  const [prefillData, setPrefillData] = useState<PrefillData | undefined>()
 
-  const handleEdit = (job: Job) => {
-    setEditJob(job)
-    setShowForm(true)
-  }
+  const handleEdit = (job: Job) => { setEditJob(job); setShowForm(true) }
+  const handleDelete = (job: Job) => { setDeleteJob(job) }
+  const confirmDelete = () => { if (deleteJob) { dispatch({ type: 'DELETE_JOB', payload: deleteJob.id }); setDeleteJob(undefined) } }
 
-  const handleDelete = (job: Job) => {
-    setDeleteJob(job)
-  }
-
-  const confirmDelete = () => {
-    if (deleteJob) {
-      dispatch({ type: 'DELETE_JOB', payload: deleteJob.id })
-      setDeleteJob(undefined)
+  const fetchJobFromUrl = async () => {
+    if (!jobUrl.trim()) return
+    setUrlLoading(true); setUrlError('')
+    try {
+      const res = await fetch(`${DOCLING_API}/api/scrape-job`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: jobUrl.trim() }),
+      })
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ detail: 'Server error' }))
+        throw new Error(err.detail || `HTTP ${res.status}`)
+      }
+      const result = await res.json()
+      const data = result.data || result
+      setPrefillData({ company: data.company, role: data.role, description: data.description, salary: data.salary, location: data.location, url: jobUrl.trim() })
+      setEditJob(undefined)
+      setShowForm(true)
+      setJobUrl('')
+    } catch (err) {
+      setUrlError(err instanceof Error ? err.message : 'Could not extract job details. Please fill manually.')
+    } finally {
+      setUrlLoading(false)
     }
   }
 
-  const statusColor = (status: string) => JOB_STATUSES.find(s => s.value === status)?.color || '#86948a'
+  const statusToCss = (status: string) => {
+    const map: Record<string, string> = {
+      applied: 'applied', saved: 'saved', interview: 'interview',
+      offer: 'offer', accepted: 'offer', rejected: 'rejected',
+    }
+    return map[status] || 'applied'
+  }
 
   return (
     <div>
       {/* Header */}
-      <div className="flex items-center justify-between mb-6 animate-fade-in-up delay-1">
-        <div>
-          <h1 className="text-headline" style={{ color: 'var(--color-on-surface)' }}>Job Applications</h1>
-          <p className="text-body mt-1" style={{ color: 'var(--color-on-surface-variant)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+        <div className="indra-section-header" style={{ marginBottom: 0 }}>
+          <p className="indra-section-eyebrow">Registry</p>
+          <h2 className="indra-section-title">Job Applications</h2>
+          <p className="indra-panel-subtitle" style={{ marginTop: '4px' }}>
             {filteredJobs.length} of {state.jobs.length} applications
           </p>
         </div>
-        <button
-          onClick={() => { setEditJob(undefined); setShowForm(true) }}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all hover:opacity-90"
-          style={{ background: 'var(--gradient-primary)', color: 'var(--color-on-primary)' }}
-        >
+        <button onClick={() => { setEditJob(undefined); setShowForm(true) }} className="indra-btn-cyan" style={{ gap: '8px' }}>
           <Plus size={16} /> Add Application
         </button>
       </div>
 
-      {/* Filters Bar */}
-      <div className="flex flex-wrap gap-3 mb-6 animate-fade-in-up delay-2">
-        <div className="flex items-center gap-2 px-4 py-2 rounded-xl flex-1 max-w-sm" style={{ background: 'var(--color-surface-container-low)', border: '1px solid var(--color-surface-container)' }}>
-          <Search size={16} style={{ color: 'var(--color-on-surface-variant)' }} />
+      {/* URL Scraper Bar */}
+      <div className="indra-panel" style={{ marginBottom: '20px', padding: '16px 20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <Link2 size={20} style={{ color: '#00B0BD', flexShrink: 0 }} />
+          <div style={{ flex: 1 }}>
+            <input
+              value={jobUrl}
+              onChange={e => { setJobUrl(e.target.value); setUrlError('') }}
+              onKeyDown={e => { if (e.key === 'Enter') fetchJobFromUrl() }}
+              placeholder="Paste a job URL (LinkedIn, Indeed, Glassdoor...) and auto-fill your application"
+              style={{ ...fieldStyle, padding: '8px 0', fontSize: '14px' }}
+              onFocus={e => (e.currentTarget.style.borderBottomColor = '#00B0BD')}
+              onBlur={e => (e.currentTarget.style.borderBottomColor = '#B0B4BD')}
+            />
+          </div>
+          <button
+            onClick={fetchJobFromUrl}
+            disabled={!jobUrl.trim() || urlLoading}
+            className="indra-btn-cyan"
+            style={{ gap: '8px', opacity: (!jobUrl.trim() || urlLoading) ? 0.5 : 1, whiteSpace: 'nowrap' }}
+          >
+            {urlLoading ? <Loader2 size={16} className="animate-spin" /> : <ExternalLink size={16} />}
+            {urlLoading ? 'Fetching...' : 'Fetch Job'}
+          </button>
+        </div>
+        {urlError && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '10px', fontSize: '13px', color: '#E91E63' }}>
+            <AlertCircle size={14} /> {urlError}
+          </div>
+        )}
+      </div>
+
+      {/* Filters */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, maxWidth: '360px', borderBottom: '1px solid #B0B4BD', padding: '8px 0' }}>
+          <Search size={16} style={{ color: '#7A9CAE' }} />
           <input
             type="text"
             placeholder="Search company or role..."
-            className="bg-transparent border-none outline-none flex-1 text-sm"
-            style={{ color: 'var(--color-on-surface)', fontFamily: 'var(--font-primary)' }}
+            style={{ background: 'transparent', border: 'none', outline: 'none', flex: 1, fontSize: '14px', color: '#FFFFFF', fontFamily: "'Inter', sans-serif" }}
             value={state.searchQuery}
             onChange={e => dispatch({ type: 'SET_SEARCH', payload: e.target.value })}
           />
         </div>
-        <div className="flex items-center gap-2">
-          <Filter size={14} style={{ color: 'var(--color-on-surface-variant)' }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Filter size={14} style={{ color: '#7A9CAE' }} />
           <select
-            className="text-sm rounded-lg px-3 py-2 outline-none"
-            style={{ background: 'var(--color-surface-container)', color: 'var(--color-on-surface)', border: '1px solid var(--color-surface-container-high)' }}
+            style={{ ...fieldStyle, width: 'auto', padding: '8px 12px', fontSize: '13px' }}
             value={state.statusFilter}
             onChange={e => dispatch({ type: 'SET_STATUS_FILTER', payload: e.target.value })}
           >
-            <option value="all">All Status</option>
-            {JOB_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+            <option value="all" style={{ background: '#003E50' }}>All Status</option>
+            {JOB_STATUSES.map(s => <option key={s.value} value={s.value} style={{ background: '#003E50' }}>{s.label}</option>)}
           </select>
           <select
-            className="text-sm rounded-lg px-3 py-2 outline-none"
-            style={{ background: 'var(--color-surface-container)', color: 'var(--color-on-surface)', border: '1px solid var(--color-surface-container-high)' }}
+            style={{ ...fieldStyle, width: 'auto', padding: '8px 12px', fontSize: '13px' }}
             value={state.originFilter}
             onChange={e => dispatch({ type: 'SET_ORIGIN_FILTER', payload: e.target.value })}
           >
-            <option value="all">All Origins</option>
-            <option value="application">Application</option>
-            <option value="referral">Referral</option>
-            <option value="recruiter">Recruiter</option>
-            <option value="other">Other</option>
+            <option value="all" style={{ background: '#003E50' }}>All Origins</option>
+            {['application','referral','recruiter','other'].map(o => <option key={o} value={o} style={{ background: '#003E50' }}>{o.charAt(0).toUpperCase()+o.slice(1)}</option>)}
           </select>
         </div>
       </div>
 
-      {/* Job Table */}
-      <div className="glass-card-elevated animate-fade-in-up delay-3 overflow-hidden" style={{ border: '1px solid var(--glass-stroke)', padding: 0 }}>
-        <div className="overflow-x-auto">
-          <table className="w-full">
+      {/* Table */}
+      <div className="indra-panel" style={{ padding: 0, overflow: 'hidden' }}>
+        <div className="indra-table-wrap">
+          <table className="indra-table">
             <thead>
-              <tr style={{ borderBottom: '1px solid var(--color-surface-container-high)' }}>
+              <tr>
                 {['Company', 'Role', 'Status', 'Salary', 'Location', 'Applied', 'Actions'].map(h => (
-                  <th key={h} className="text-left text-label-sm px-5 py-3.5" style={{ color: 'var(--color-on-surface-variant)' }}>
-                    {h}
-                  </th>
+                  <th key={h}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {filteredJobs.map(job => (
-                <tr
-                  key={job.id}
-                  className="transition-all cursor-pointer"
-                  style={{ borderBottom: '1px solid var(--color-surface-container)' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-surface-container-low)' }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent' }}
-                >
-                  <td className="px-5 py-3.5">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold" style={{ background: 'var(--gradient-primary-subtle)', color: 'var(--color-primary)' }}>
+                <tr key={job.id}>
+                  <td>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{
+                        width: '32px', height: '32px', background: 'rgba(0,176,189,0.12)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: '13px', fontWeight: 700, color: '#00B0BD',
+                      }}>
                         {job.company[0]}
                       </div>
-                      <span className="text-sm font-medium" style={{ color: 'var(--color-on-surface)' }}>{job.company}</span>
+                      <strong>{job.company}</strong>
                     </div>
                   </td>
-                  <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--color-on-surface)' }}>{job.role}</td>
-                  <td className="px-5 py-3.5">
-                    <span className="text-xs px-2.5 py-1 rounded-full font-medium inline-flex items-center gap-1.5"
-                      style={{ background: `${statusColor(job.status)}20`, color: statusColor(job.status) }}>
-                      <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: statusColor(job.status) }} />
+                  <td><strong>{job.role}</strong></td>
+                  <td>
+                    <span className={`indra-status-badge ${statusToCss(job.status)}`}>
                       {JOB_STATUSES.find(s => s.value === job.status)?.label}
                     </span>
                   </td>
-                  <td className="px-5 py-3.5 text-sm text-data" style={{ color: 'var(--color-on-surface-variant)' }}>{job.salary || '—'}</td>
-                  <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--color-on-surface-variant)' }}>{job.location || '—'}</td>
-                  <td className="px-5 py-3.5 text-sm text-data" style={{ color: 'var(--color-on-surface-variant)' }}>
+                  <td style={{ fontFamily: "'JetBrains Mono', monospace" }}>{job.salary || '—'}</td>
+                  <td>{job.location || '—'}</td>
+                  <td style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                     {new Date(job.appliedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                   </td>
-                  <td className="px-5 py-3.5">
-                    <div className="flex items-center gap-1">
-                      <button onClick={() => setAiJob(job)} className="p-1.5 rounded-lg transition-all hover:opacity-70" style={{ color: 'var(--color-primary)' }} title="AI Assistant">
-                        <Sparkles size={14} />
-                      </button>
-                      <button onClick={() => handleEdit(job)} className="p-1.5 rounded-lg transition-all hover:opacity-70" style={{ color: 'var(--color-on-surface-variant)' }} title="Edit">
-                        <Pencil size={14} />
-                      </button>
-                      <button onClick={() => handleDelete(job)} className="p-1.5 rounded-lg transition-all hover:opacity-70" style={{ color: 'var(--color-tertiary)' }} title="Delete">
-                        <Trash2 size={14} />
-                      </button>
+                  <td>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <button onClick={() => setAiJob(job)} style={{ background: 'none', border: 'none', color: '#00B0BD', cursor: 'pointer', padding: '6px' }} title="AI Assistant"><Sparkles size={14} /></button>
+                      <button onClick={() => handleEdit(job)} style={{ background: 'none', border: 'none', color: '#7A9CAE', cursor: 'pointer', padding: '6px' }} title="Edit"><Pencil size={14} /></button>
+                      <button onClick={() => handleDelete(job)} style={{ background: 'none', border: 'none', color: '#E91E63', cursor: 'pointer', padding: '6px' }} title="Delete"><Trash2 size={14} /></button>
                       {job.url && (
-                        <a href={job.url} target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-lg transition-all hover:opacity-70" style={{ color: 'var(--color-on-surface-variant)' }} title="Open URL">
-                          <ExternalLink size={14} />
-                        </a>
+                        <a href={job.url} target="_blank" rel="noopener noreferrer" style={{ color: '#7A9CAE', padding: '6px' }} title="Open URL"><ExternalLink size={14} /></a>
                       )}
                     </div>
                   </td>
@@ -330,16 +327,16 @@ export function JobsPage() {
         </div>
 
         {filteredJobs.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-16" style={{ color: 'var(--color-on-surface-variant)' }}>
-            <Search size={40} className="mb-3 opacity-30" />
-            <p className="text-title-sm">No applications found</p>
-            <p className="text-label-md mt-1">Try adjusting your filters or add a new application</p>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '64px 0', color: '#7A9CAE' }}>
+            <Search size={40} style={{ opacity: 0.3, marginBottom: '12px' }} />
+            <p style={{ fontSize: '16px', fontWeight: 600 }}>No applications found</p>
+            <p style={{ fontSize: '12px', marginTop: '4px' }}>Try adjusting your filters or add a new application</p>
           </div>
         )}
       </div>
 
       {/* Modals */}
-      {showForm && <JobFormModal job={editJob} onClose={() => { setShowForm(false); setEditJob(undefined) }} />}
+      {showForm && <JobFormModal job={editJob} prefill={prefillData} onClose={() => { setShowForm(false); setEditJob(undefined); setPrefillData(undefined) }} />}
       {deleteJob && <DeleteModal job={deleteJob} onConfirm={confirmDelete} onClose={() => setDeleteJob(undefined)} />}
       {aiJob && <AIToolsPanel job={aiJob} onClose={() => setAiJob(undefined)} />}
     </div>

@@ -495,3 +495,842 @@ body {
     margin-left: 0;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   INDRA CORPORATE DESIGN SYSTEM — Login Page Styles (DSS v3.0)
+   12 Canonical Swatches · No Substitution · No Approximation
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ─── Indra Canonical Swatches ─── */
+:root {
+  --indra-deep:       #002B3A;
+  --indra-dark:       #003E50;
+  --indra-primary:    #06596E;
+  --indra-secondary:  #346679;
+  --indra-teal:       #3F96AE;
+  --indra-cyan:       #00B0BD;
+  --indra-light:      #7A9CAE;
+  --indra-blue-gray:  #B3C1DA;
+  --indra-sky:        #BADFF3;
+  --indra-warm-gray:  #B0B4BD;
+  --indra-off-white:  #F2F5F6;
+
+  /* Status */
+  --indra-success: #27AE60;
+  --indra-warning: #FF9800;
+  --indra-error:   #E91E63;
+  --indra-gold:    #FFC107;
+
+  /* Timing */
+  --indra-duration-fast: 200ms;
+  --indra-duration-normal: 300ms;
+  --indra-duration-slow: 500ms;
+  --indra-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─── Animations ─── */
+@keyframes indra-slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes indra-slide-right {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes indra-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ─── Login Root ─── */
+.indra-login-root {
+  min-height: 100vh;
+  display: flex;
+  background: var(--indra-deep);
+  font-family: 'Inter', 'Segoe UI', -apple-system, sans-serif;
+}
+
+/* ─── Hero Panel (Left) ─── */
+.indra-hero-panel {
+  flex: 1;
+  position: relative;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: var(--indra-deep);
+  background-image:
+    radial-gradient(ellipse at 30% 70%, rgba(0,176,189,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(63,150,174,0.1) 0%, transparent 50%);
+}
+@media (min-width: 1024px) {
+  .indra-hero-panel { display: flex; }
+}
+
+.indra-hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.indra-hero-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 25% 65%, rgba(0,176,189,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse at 75% 25%, rgba(63,150,174,0.08) 0%, transparent 45%);
+  z-index: 0;
+}
+
+.indra-hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 640px;
+  padding: 0 32px;
+  animation: indra-slide-up 0.8s var(--indra-ease-out) both;
+}
+
+/* ─── Eyebrow ─── */
+.indra-eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 24px;
+  text-transform: uppercase;
+}
+
+/* ─── Headline ─── */
+.indra-hero-headline {
+  font-size: clamp(32px, 4.5vw, 48px);
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+  margin-bottom: 24px;
+}
+
+.indra-text-cyan {
+  color: var(--indra-cyan);
+}
+
+/* ─── Subtitle ─── */
+.indra-hero-subtitle {
+  font-size: 16px;
+  color: rgba(255,255,255,0.6);
+  max-width: 480px;
+  margin: 0 auto 32px;
+  line-height: 1.6;
+}
+
+/* ─── Features ─── */
+.indra-feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-start;
+  margin: 0 auto 40px;
+  max-width: 360px;
+}
+
+.indra-feature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.65);
+  animation: indra-slide-up 0.7s var(--indra-ease-out) both;
+}
+
+/* ─── KPI Row ─── */
+.indra-kpi-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 16px;
+  animation: indra-slide-up 0.7s var(--indra-ease-out) 0.9s both;
+}
+
+.indra-glass-card {
+  background: rgba(0, 62, 80, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 20px 24px;
+  text-align: center;
+  transition: transform var(--indra-duration-fast) ease;
+}
+.indra-glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+}
+
+.indra-kpi-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 8px;
+}
+
+.indra-kpi-value {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+  line-height: 1;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ─── Form Panel (Right) ─── */
+.indra-form-panel {
+  flex: 1;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background: var(--indra-dark);
+  border-left: 1px solid rgba(255,255,255,0.06);
+}
+@media (min-width: 1024px) {
+  .indra-form-panel { max-width: 480px; }
+}
+
+.indra-form-container {
+  width: 100%;
+  max-width: 380px;
+  animation: indra-slide-right 0.8s var(--indra-ease-out) 0.2s both;
+}
+
+/* ─── Mobile Logo ─── */
+.indra-mobile-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+@media (min-width: 1024px) {
+  .indra-mobile-logo { display: none; }
+}
+
+.indra-mobile-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+/* ─── Form Header ─── */
+.indra-form-header {
+  margin-bottom: 32px;
+}
+
+.indra-form-eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--indra-cyan);
+  margin-bottom: 12px;
+}
+
+.indra-form-heading {
+  font-size: 28px;
+  font-weight: 300;
+  color: #FFFFFF;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+/* ─── Form Fields ─── */
+.indra-auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.indra-form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.indra-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.indra-form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--indra-light);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.indra-forgot-link {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--indra-cyan);
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: color var(--indra-duration-fast) ease;
+}
+.indra-forgot-link:hover { color: var(--indra-teal); }
+
+.indra-input-wrapper {
+  position: relative;
+}
+
+.indra-input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: color 0.3s ease;
+  pointer-events: none;
+}
+
+.indra-form-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--indra-warm-gray);
+  padding: 12px 12px 12px 42px;
+  font-size: 16px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  color: #FFFFFF;
+  transition: border-color 0.25s ease;
+  outline: none;
+}
+.indra-form-input::placeholder {
+  color: var(--indra-light);
+  opacity: 0.6;
+}
+.indra-form-input:focus,
+.indra-form-input--focused {
+  border-bottom-color: var(--indra-cyan);
+  border-bottom-width: 2px;
+}
+
+.indra-eye-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--indra-light);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color var(--indra-duration-fast) ease;
+}
+.indra-eye-btn:hover { color: var(--indra-cyan); }
+
+/* ─── Error Message ─── */
+.indra-error-msg {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(233,30,99,0.1);
+  border: 1px solid rgba(233,30,99,0.2);
+  border-radius: 0;
+  font-size: 13px;
+  color: var(--indra-error);
+}
+.indra-error-msg svg { flex-shrink: 0; margin-top: 2px; }
+
+/* ─── Buttons ─── */
+.indra-btn-cyan {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 12px 28px;
+  border-radius: 0;
+  border: none;
+  cursor: pointer;
+  min-height: 44px;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--indra-cyan);
+  color: var(--indra-deep);
+  transition: all 0.25s ease;
+}
+.indra-btn-cyan:hover:not(:disabled) {
+  background: var(--indra-teal);
+  box-shadow: 0 8px 24px rgba(0,176,189,0.3);
+  transform: translateY(-1px);
+}
+.indra-btn-cyan:active:not(:disabled) { transform: translateY(0); }
+.indra-btn-cyan:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.indra-btn-secondary {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 12px 28px;
+  border-radius: 0;
+  border: 1px solid var(--indra-cyan);
+  cursor: pointer;
+  min-height: 44px;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: transparent;
+  color: #FFFFFF;
+  transition: all 0.25s ease;
+}
+.indra-btn-secondary:hover:not(:disabled) {
+  background: rgba(0,176,189,0.1);
+}
+.indra-btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.indra-btn--form {
+  width: 100%;
+  margin-top: 4px;
+}
+
+/* ─── Divider ─── */
+.indra-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 20px 0;
+}
+.indra-divider-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+}
+.indra-divider-text {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+}
+
+/* ─── Toggle ─── */
+.indra-toggle-text {
+  text-align: center;
+  font-size: 14px;
+  color: var(--indra-light);
+  margin-top: 24px;
+}
+
+.indra-toggle-link {
+  background: none;
+  border: none;
+  color: var(--indra-cyan);
+  font-weight: 600;
+  cursor: pointer;
+  transition: color var(--indra-duration-fast) ease;
+}
+.indra-toggle-link:hover { color: var(--indra-teal); }
+
+/* ─── Auth Footer ─── */
+.indra-auth-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 40px;
+  color: rgba(255,255,255,0.15);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .indra-form-panel { padding: 24px 20px; }
+  .indra-hero-headline { font-size: 28px; }
+  .indra-kpi-row { flex-direction: column; align-items: center; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   INDRA DASHBOARD LAYOUT — Sidebar + Topbar + Content (DSS v3.0)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ─── Dashboard Shell ─── */
+.indra-dash-shell { display: flex; min-height: 100vh; background: var(--indra-deep); }
+
+/* ─── Sidebar ─── */
+.indra-sidebar {
+  width: 64px;
+  background: var(--indra-deep);
+  border-right: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 0;
+  gap: 8px;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 100;
+}
+
+.indra-sidebar-logo {
+  width: 36px; height: 36px;
+  background: var(--indra-cyan);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px;
+  color: var(--indra-deep);
+  margin-bottom: 16px;
+  font-family: 'Inter', sans-serif;
+}
+
+.indra-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.indra-sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.indra-nav-icon {
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--indra-light);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  background: none;
+  border: none;
+  border-radius: 0;
+}
+.indra-nav-icon:hover,
+.indra-nav-icon.active {
+  color: var(--indra-cyan);
+}
+.indra-nav-icon.active::before {
+  content: '';
+  position: absolute;
+  left: -12px; top: 8px;
+  width: 3px; height: 24px;
+  background: var(--indra-cyan);
+}
+
+/* ─── Main Area ─── */
+.indra-dash-main {
+  margin-left: 64px;
+  flex: 1;
+  min-height: 100vh;
+}
+
+/* ─── Top Bar ─── */
+.indra-topbar {
+  height: 56px;
+  background: var(--indra-deep);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.indra-topbar-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #FFFFFF;
+  letter-spacing: -0.01em;
+  font-family: 'Inter', sans-serif;
+}
+.indra-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.indra-notif-badge {
+  position: relative;
+  color: var(--indra-light);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.indra-notif-badge:hover { color: var(--indra-cyan); }
+.indra-notif-dot {
+  position: absolute;
+  top: -2px; right: -2px;
+  width: 8px; height: 8px;
+  background: var(--indra-error);
+  border-radius: 50%;
+}
+
+.indra-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--indra-dark);
+  border: 2px solid var(--indra-cyan);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600;
+  color: var(--indra-cyan);
+  object-fit: cover;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ─── Content Area ─── */
+.indra-dash-content {
+  padding: 24px 32px;
+}
+
+/* ─── KPI Row (Dashboard) ─── */
+.indra-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 28px;
+}
+.indra-kpi-card {
+  background: rgba(0, 62, 80, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 20px 24px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.indra-kpi-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0,176,189,0.3);
+}
+.indra-kpi-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: var(--indra-cyan);
+}
+.indra-kpi-card .indra-kpi-label {
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--indra-light); margin-bottom: 8px;
+}
+.indra-kpi-card .indra-kpi-value {
+  font-size: 28px; font-weight: 600;
+  color: #FFFFFF; line-height: 1.1;
+  font-feature-settings: 'tnum';
+  font-family: 'JetBrains Mono', monospace;
+}
+.indra-kpi-change {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px; font-weight: 500;
+  margin-top: 8px; padding: 2px 8px;
+  border-radius: 9999px;
+}
+.indra-kpi-change.up { color: var(--indra-success); background: rgba(39,174,96,0.12); }
+.indra-kpi-change.down { color: var(--indra-error); background: rgba(233,30,99,0.12); }
+
+/* ─── Panel (Chart/Activity containers) ─── */
+.indra-panel {
+  background: var(--indra-dark);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 24px;
+}
+.indra-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.indra-panel-title {
+  font-size: 16px; font-weight: 600;
+  color: #FFFFFF;
+  font-family: 'Inter', sans-serif;
+}
+.indra-panel-subtitle {
+  font-size: 12px;
+  color: var(--indra-light);
+}
+
+/* ─── Dashboard Grid ─── */
+.indra-dash-grid {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+/* ─── Activity Feed ─── */
+.indra-activity-list { list-style: none; padding: 0; margin: 0; }
+.indra-activity-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(179,193,218,0.08);
+}
+.indra-activity-item:last-child { border-bottom: none; }
+.indra-activity-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-top: 6px; flex-shrink: 0;
+}
+.indra-activity-dot.success { background: var(--indra-success); }
+.indra-activity-dot.warning { background: var(--indra-warning); }
+.indra-activity-dot.error { background: var(--indra-error); }
+.indra-activity-dot.info { background: var(--indra-cyan); }
+.indra-activity-text {
+  font-size: 13px;
+  color: var(--indra-blue-gray);
+  line-height: 1.5;
+}
+.indra-activity-text strong { color: #FFFFFF; font-weight: 500; }
+.indra-activity-time {
+  font-size: 11px;
+  color: var(--indra-light);
+  margin-top: 2px;
+}
+
+/* ─── Status Badge ─── */
+.indra-status-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.04em; padding: 4px 10px; border-radius: 9999px;
+}
+.indra-status-badge::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor;
+}
+.indra-status-badge.applied { color: var(--indra-cyan); background: rgba(0,176,189,0.12); }
+.indra-status-badge.interview { color: var(--indra-warning); background: rgba(255,152,0,0.12); }
+.indra-status-badge.offer { color: var(--indra-success); background: rgba(39,174,96,0.12); }
+.indra-status-badge.rejected { color: var(--indra-error); background: rgba(233,30,99,0.12); }
+.indra-status-badge.saved { color: var(--indra-blue-gray); background: rgba(179,193,218,0.12); }
+
+/* ─── Data Table ─── */
+.indra-table-wrap {
+  overflow-x: auto;
+}
+.indra-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Inter', sans-serif;
+}
+.indra-table th {
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--indra-light);
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  white-space: nowrap;
+}
+.indra-table td {
+  font-size: 13px;
+  color: var(--indra-blue-gray);
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  white-space: nowrap;
+}
+.indra-table tr:hover td {
+  background: rgba(0,176,189,0.04);
+}
+.indra-table td strong {
+  color: #FFFFFF;
+  font-weight: 500;
+}
+
+/* ─── Section Title ─── */
+.indra-section-header {
+  margin-bottom: 20px;
+}
+.indra-section-eyebrow {
+  font-size: 12px; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--indra-cyan);
+  margin-bottom: 8px;
+}
+.indra-section-title {
+  font-size: 24px; font-weight: 300;
+  color: #FFFFFF; letter-spacing: -0.02em;
+}
+
+/* ─── Status Grid (Service Cards) ─── */
+.indra-status-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* ─── Dashboard Responsive ─── */
+@media (max-width: 1024px) {
+  .indra-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .indra-dash-grid { grid-template-columns: 1fr; }
+  .indra-status-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .indra-sidebar { display: none; }
+  .indra-dash-main { margin-left: 0; }
+  .indra-kpi-grid { grid-template-columns: 1fr; }
+  .indra-dash-content { padding: 16px; }
+  .indra-topbar { padding: 0 16px; }
+}
+
+/* ─── Benchmark Inputs ─── */
+.indra-input {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  background: var(--indra-bg-card, #002B3A);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  color: var(--indra-text-primary, #FFFFFF);
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+  display: block;
+}
+.indra-input:focus {
+  border-color: var(--indra-cyan, #00B0BD);
+}
+.indra-input::placeholder {
+  color: var(--indra-text-muted, #7A9CAE);
+}
+
+/* ─── Keyframe Animations ─── */
+@keyframes indra-loading-bar {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
+}
+
+@keyframes indra-slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
+  40% { opacity: 1; transform: scale(1); }
+}
+
+

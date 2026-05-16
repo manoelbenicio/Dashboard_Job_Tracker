@@ -150,8 +150,88 @@
 
 ---
 
-## Progress
+### Phase 11: Executive Benchmark Engine
+**Goal**: Build an 8-phase AI-powered competitive analysis engine that evaluates a user's CV against a target job description, producing executive-level insights including market positioning scores, risk assessment, strategic repositioning, and CV rewrite.
+**Requirements**: BENCH-01 through BENCH-08
+**UI hint**: yes
+**Depends on**: Phase 5 (AI integration pattern), Phase 3 (JobContext)
 
+**Success Criteria**:
+1. User uploads CV (PDF/DOCX) and pastes job description or URL
+2. All 8 benchmark phases complete successfully with AI analysis
+3. Results display in premium dashboard with score rings, tables, and risk badges
+4. Output quality matches or exceeds manual ChatGPT analysis
+5. Engine supports Gemini and OpenAI providers with automatic fallback
+
+---
+
+### Phase 12: Multi-Provider AI Support
+**Goal**: Abstract AI provider layer supporting Google Gemini (primary) and OpenAI/ChatGPT (fallback). Add provider configuration UI in Settings. Enable adaptive rate limiting and provider-agnostic AI features across the entire app.
+**Requirements**: PROV-01, PROV-02, PROV-03
+**UI hint**: yes
+**Depends on**: Phase 11
+
+**Success Criteria**:
+1. Settings page has both Gemini and OpenAI API key fields
+2. Benchmark engine automatically falls back from Gemini → OpenAI on failure
+3. All AI features (cover letter, interview guide, Claire) support provider fallback
+4. Rate limit detection with adaptive cooldown between API calls
+
+---
+
+## Milestone: v2.0 — Executive Benchmark Intelligence Dashboard
+
+### Phase 13: Benchmark Dashboard Architecture & Data Layer
+**Goal**: Restructure the benchmark results page to support a full-width dashboard layout. Create the necessary data adapters to format the raw AI output (Phase 1-8 results) into structured props for advanced charting components.
+**Requirements**: DASH-V2-01
+**UI hint**: yes
+**Depends on**: Phase 11
+
+**Success Criteria**:
+1. New full-width layout for the benchmark results page.
+2. Data adapters successfully transform raw JSON into Recharts-compatible structures.
+
+---
+
+### Phase 14: Core Visualizations (Radar, Gauges, Heatmaps)
+**Goal**: Implement the primary interactive charts: Radar/Spider chart for the Market Positioning Score (Phase 1), a visual Market Position Map (Phase 2), and a Dominance Probability Gauge (Phase 6).
+**Requirements**: DASH-V2-02, DASH-V2-03, DASH-V2-06
+**UI hint**: yes
+**Depends on**: Phase 13
+
+**Success Criteria**:
+1. Radar chart renders 8-axis scoring accurately with animated tooltips.
+2. Market position map displays candidate relative to Fortune 100/Big Tech.
+3. Probability gauge animated from 0 to target score.
+
+---
+
+### Phase 15: Risk Matrix & Gap Analysis Components
+**Goal**: Implement the Risk Matrix heatmap (Phase 4) and the Interactive Gap Analysis visualization (Phase 8), along with distinctiveness highlight cards (Phase 3).
+**Requirements**: DASH-V2-04, DASH-V2-05, DASH-V2-07
+**UI hint**: yes
+**Depends on**: Phase 14
+
+**Success Criteria**:
+1. Risk matrix maps severity/likelihood visually.
+2. Gap analysis component shows interactive before/after states.
+
+---
+
+### Phase 16: Expert Skills Integration & Insights Polish
+**Goal**: Integrate dynamic KPI cards that leverage the `data_expert_skills` metrics to provide deep, contextual insights. Polish the entire dashboard with premium staggered entry animations, glassmorphism perfection, and high-fidelity typography matching Fortune 500 boardroom standards.
+**Requirements**: DASH-V2-08
+**UI hint**: yes
+**Depends on**: Phase 15
+
+**Success Criteria**:
+1. KPI cards surface expert metrics accurately.
+2. All components animate smoothly on entry.
+3. Layout matches premium C-level aesthetic without overflowing containers.
+
+---
+
+## Progress
 | Phase | Name | Plans | Status |
 |-------|------|-------|--------|
 | 1 | Project Scaffolding & Design System | — | ✅ Done |
@@ -164,6 +244,12 @@
 | 8 | Firebase Project Setup & SDK | — | ✅ Done |
 | 9 | Authentication UI & Auth Guards | — | ✅ Done |
 | 10 | Firebase Hosting Deployment | — | ✅ Done |
+| 11 | Executive Benchmark Engine | — | ✅ Done |
+| 12 | Multi-Provider AI Support | — | ✅ Done |
+| 13 | Benchmark Dashboard Architecture | — | ✅ Done |
+| 14 | Core Visualizations (Radar/Gauges) | — | ✅ Done |
+| 15 | Risk Matrix & Gap Analysis | — | ✅ Done |
+| 16 | Expert Skills Integration & Polish | — | ✅ Done |
 
 ---
 

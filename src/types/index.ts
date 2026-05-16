@@ -1,4 +1,4 @@
-export type JobStatus = 'applied' | 'interview' | 'offer' | 'accepted' | 'rejected'
+export type JobStatus = 'applied' | 'under_review' | 'interview' | 'offer' | 'accepted' | 'rejected'
 
 export interface Job {
   id: string
@@ -24,6 +24,7 @@ export interface UserProfile {
   skills: string[]
   summary: string
   apiKey: string
+  openaiApiKey: string
 }
 
 export interface AppState {
@@ -34,6 +35,7 @@ export interface AppState {
 }
 
 export const JOB_STATUSES: { value: JobStatus; label: string; color: string }[] = [
+  { value: 'under_review', label: 'Under Review', color: '#8B5CF6' },
   { value: 'applied', label: 'Applied', color: '#3B82F6' },
   { value: 'interview', label: 'Interview', color: '#F59E0B' },
   { value: 'offer', label: 'Offer', color: '#10B981' },
@@ -47,4 +49,5 @@ export const DEFAULT_PROFILE: UserProfile = {
   skills: [],
   summary: '',
   apiKey: '',
+  openaiApiKey: '',
 }

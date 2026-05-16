@@ -8,6 +8,7 @@ import { KanbanPage } from '@/pages/KanbanPage'
 import { ResumePage } from '@/pages/ResumePage'
 import { SettingsPage } from '@/pages/SettingsPage'
 import { AnalyticsPage } from '@/pages/AnalyticsPage'
+import { BenchmarkPage } from '@/pages/BenchmarkPage'
 import { LoginPage } from '@/pages/LoginPage'
 import { ClaireChat } from '@/components/ai/ClaireChat'
 import { analytics } from '@/lib/analytics'
@@ -20,10 +21,39 @@ function AuthGate() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0F1117' }}>
-        <div className="flex flex-col items-center gap-3">
-          <Loader2 size={32} className="animate-spin" style={{ color: '#10B981' }} />
-          <p className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>Loading JobFlow...</p>
+      <div style={{
+        minHeight: '100vh', display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center', gap: '24px',
+        background: '#0F1117',
+      }}>
+        {/* Logo */}
+        <div style={{
+          width: '64px', height: '64px', display: 'flex',
+          alignItems: 'center', justifyContent: 'center',
+          background: 'linear-gradient(135deg, #003E50, #00B0BD)',
+          borderRadius: '16px', boxShadow: '0 8px 32px rgba(0,176,189,0.25)',
+        }}>
+          <span style={{ fontSize: '24px', fontWeight: 800, color: '#FFFFFF', fontFamily: "'Inter', sans-serif" }}>JF</span>
+        </div>
+
+        {/* Brand */}
+        <div style={{ textAlign: 'center' }}>
+          <h1 style={{ fontSize: '20px', fontWeight: 700, color: '#FFFFFF', fontFamily: "'Inter', sans-serif", margin: '0 0 4px 0' }}>
+            JobFlow
+          </h1>
+          <p style={{ fontSize: '12px', color: '#7A9CAE', fontFamily: "'Inter', sans-serif", margin: 0, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            Executive Job Tracker
+          </p>
+        </div>
+
+        {/* Animated loading bar */}
+        <div style={{ width: '200px', height: '3px', background: 'rgba(255,255,255,0.06)', borderRadius: '2px', overflow: 'hidden' }}>
+          <div style={{
+            width: '40%', height: '100%',
+            background: 'linear-gradient(90deg, transparent, #00B0BD, transparent)',
+            borderRadius: '2px',
+            animation: 'indra-loading-bar 1.5s ease-in-out infinite',
+          }} />
         </div>
       </div>
     )
@@ -64,6 +94,7 @@ function AppShell({ user }: { user: any }) {
       case 'jobs': return <JobsPage />
       case 'kanban': return <KanbanPage />
       case 'resume': return <ResumePage />
+      case 'benchmark': return <BenchmarkPage />
       case 'analytics': return <AnalyticsPage />
       case 'settings': return <SettingsPage />
       default: return <DashboardPage />
