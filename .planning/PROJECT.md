@@ -10,16 +10,17 @@ JobFlow is a premium, agentic job application tracker that combines an executive
 
 A user can track their job applications through a visually stunning, data-rich interface and receive AI-powered assistance (cover letters, resume analysis, interview prep, career coaching) at every stage of their job search — all behind secure Firebase Authentication and deployed to the cloud.
 
-## Current Milestone: v2.0 Executive Benchmark Intelligence Dashboard
+## Current Milestone: v3.1 Indra Design System — Layout & Palette Decoupling
 
-**Goal:** Transform the text-based benchmark engine output into a premium, interactive, Fortune 500-grade visual dashboard with radar charts, KPI cards, gap analysis, and risk heat maps.
+**Goal:** Implement all 5 Indra dashboard layouts (Command, Pulse, Glass, Matrix, Aurora) as distinct full-featured screens and decouple color palette selection from layout selection, enabling independent switching of each dimension.
 
 **Target features:**
-- Interactive Radar/Spider charts for Market Positioning Score
-- Visual Market Position mapping (vs Fortune 100/Big Tech)
-- Risk Matrix heatmaps and Dominance Probability gauges
-- Integration with `data_expert_skills` for dynamic KPI cards
-- Premium, highly-animated, C-level presentation of benchmark results
+- Restore missing API key input field in Settings screen
+- Implement 5 distinct dashboard layouts with unique KPI arrangements, typography, and widget structures
+- Decouple Layout Selector from Color Palette Selector into two independent controls
+- Each layout must have its own KPI cards, counters, charts, and feed sections per mockups
+- Color palette changes only swap colors — layout structure, KPIs, and data remain AS IS
+- Both choices persisted independently via SharedPreferences
 
 ## Requirements
 
@@ -41,6 +42,13 @@ A user can track their job applications through a visually stunning, data-rich i
 - [x] Firebase Hosting deployment — live at *.web.app (Phase 10)
 - [x] Theme switching — Dark + Light mode (Phase 1)
 - [x] PDF export from Resume Builder (Phase 6)
+- [x] Interactive Radar/Spider charts for Market Positioning Score (Phase 14)
+- [x] Visual Market Position Map vs Fortune 100/Big Tech (Phase 14)
+- [x] Distinctiveness Heatmap / highlight cards (Phase 15)
+- [x] Risk Matrix visualization with severity indicators (Phase 15)
+- [x] Dominance Probability Gauge with global ranking (Phase 14)
+- [x] Interactive Gap Analysis showing current vs target state (Phase 15)
+- [x] Dynamic KPI cards integrated with expert skills metrics (Phase 16)
 
 ### Deferred to Backlog
 
