@@ -81,7 +81,9 @@ function SortableCard({ job }: { job: Job }) {
     id: job.id, data: { type: 'card', job },
   })
   return (
-    <div ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.3 : 1 }} {...attributes} {...listeners}>
+    <div ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.3 : 1 }} {...attributes} {...listeners}
+      onDoubleClick={() => (window as any).__jobflow_viewJob?.(job.id)}
+    >
       <KanbanCard job={job} />
     </div>
   )

@@ -1,5 +1,12 @@
 export type JobStatus = 'applied' | 'under_review' | 'interview' | 'offer' | 'accepted' | 'rejected'
 
+export interface JobComment {
+  id: string
+  text: string
+  createdAt: string       // ISO string
+  updatedAt: string       // ISO string
+}
+
 export interface Job {
   id: string
   company: string
@@ -13,6 +20,7 @@ export interface Job {
   notes: string
   coverLetter: string
   interviewGuide: string
+  comments: JobComment[]   // timestamped comments
   appliedDate: string      // ISO string
   lastUpdated: string      // ISO string
   createdAt: string        // ISO string

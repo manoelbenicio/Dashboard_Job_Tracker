@@ -1,7 +1,8 @@
-import { Palette, User, Key, Download, Upload, BarChart3, Shield } from 'lucide-react'
+import { Palette, User, Key, Download, Upload, BarChart3, Shield, Trash2, AlertTriangle } from 'lucide-react'
 import { useState, useRef } from 'react'
 import { useJobs } from '@/context/JobContext'
 import { exportData, importData } from '@/lib/storage'
+import { softDeleteAccount } from '@/lib/governance'
 import { AnalyticsPage } from '@/pages/AnalyticsPage'
 
 const fieldStyle: React.CSSProperties = {
@@ -23,6 +24,9 @@ export function SettingsPage() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [toast, setToast] = useState('')
   const [activeTab, setActiveTab] = useState('profile')
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [deleteConfirm, setDeleteConfirm] = useState('')
+  const [deleting, setDeleting] = useState(false)
 
   const [name, setName] = useState(state.profile.name)
   const [email, setEmail] = useState(state.profile.email)
@@ -182,6 +186,30 @@ export function SettingsPage() {
               <input ref={fileInputRef} type="file" accept=".json" style={{ display: 'none' }} onChange={handleImport} />
             </div>
           </div>
+
+          {/* Danger Zone — Account Deletion */}
+          <div className="indra-panel" style={{ marginBottom: '24px', borderColor: 'rgba(233,30,99,0.2)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+              <AlertTriangle size={20} style={{ color: '#E91E63' }} />
+              <h3 className="indra-panel-title" style={{ color: '#E91E63' }}>Danger Zone</h3>
+            </div>
+            <p style={{ fontSize: '13px', color: '#7A9CAE', marginBottom: '16px', lineHeight: 1.6 }}>
+              Requesting account deletion will soft-delete your profile. Your data will be retained for <strong style={{ color: '#FFFFFF' }}>5 years</strong> for legal compliance, but will be inaccessible. This action is irreversible.
+            </p>
+            <button onClick={() => setShowDeleteDialog(true)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '8px',
+                padding: '10px 20px', background: 'rgba(233,30,99,0.08)',
+                border: '1px solid rgba(233,30,99,0.25)', borderRadius: '6px',
+                color: '#E91E63', cursor: 'pointer', fontSize: '13px', fontWeight: 500,
+                transition: 'all 0.2s',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(233,30,99,0.15)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'rgba(233,30,99,0.08)')}
+            >
+              <Trash2 size={14} /> Excluir Minha Conta
+            </button>
+          </div>
         </div>
       )}
 
@@ -193,6 +221,57 @@ export function SettingsPage() {
             <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#FFFFFF' }}>Analytics & Reports</h3>
           </div>
           <AnalyticsPage />
+        </div>
+      )}
+
+      {/* Delete Account Dialog */}
+      {showDeleteDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
+          onClick={e => { if (e.target === e.currentTarget) setShowDeleteDialog(false) }}>
+          <div className="w-full max-w-md indra-panel" style={{ animation: 'indra-slide-up 0.3s ease-out' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+              <AlertTriangle size={24} style={{ color: '#E91E63' }} />
+              <h2 style={{ fontSize: '18px', fontWeight: 300, color: '#FFFFFF' }}>Confirmar Exclusão</h2>
+            </div>
+            <p style={{ fontSize: '14px', color: '#B3C1DA', marginBottom: '16px', lineHeight: 1.6 }}>
+              Esta ação irá desativar sua conta. Seus dados serão retidos por <strong style={{ color: '#FFFFFF' }}>5 anos</strong> para conformidade legal, mas você não poderá acessá-los.
+            </p>
+            <p style={{ fontSize: '13px', color: '#7A9CAE', marginBottom: '8px' }}>
+              Digite <strong style={{ color: '#E91E63' }}>EXCLUIR</strong> para confirmar:
+            </p>
+            <input
+              value={deleteConfirm}
+              onChange={e => setDeleteConfirm(e.target.value)}
+              placeholder="EXCLUIR"
+              style={{ ...fieldStyle, marginBottom: '16px', borderBottomColor: deleteConfirm === 'EXCLUIR' ? '#E91E63' : '#B0B4BD' }}
+            />
+            <div className="flex gap-3">
+              <button onClick={() => { setShowDeleteDialog(false); setDeleteConfirm('') }} className="indra-btn-secondary" style={{ flex: 1 }}>Cancelar</button>
+              <button
+                disabled={deleteConfirm !== 'EXCLUIR' || deleting}
+                onClick={async () => {
+                  setDeleting(true)
+                  try {
+                    await softDeleteAccount()
+                    // Auth sign-out already handled by governance service
+                    // Page will redirect to login via auth listener
+                  } catch (err: any) {
+                    showToast('Erro: ' + (err.message || 'Falha ao excluir conta'))
+                    setDeleting(false)
+                  }
+                }}
+                className="indra-btn-cyan"
+                style={{
+                  flex: 1,
+                  background: deleteConfirm === 'EXCLUIR' ? '#E91E63' : '#555',
+                  opacity: deleteConfirm === 'EXCLUIR' && !deleting ? 1 : 0.5,
+                  cursor: deleteConfirm === 'EXCLUIR' && !deleting ? 'pointer' : 'not-allowed',
+                }}
+              >
+                {deleting ? 'Processando...' : 'Excluir Conta'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

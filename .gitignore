@@ -50,3 +50,13 @@ Web_Spec_Driven_APP
 # Temp scripts (not part of app)
 *.py
 request.json
+
+# Mobile Firebase config (client keys — not secret, but avoids GH alerts)
+jobflow_mobile/lib/firebase_options.dart
+jobflow_mobile/android/app/google-services.json
+jobflow_mobile/ios/Runner/GoogleService-Info.plist
+
+# Mobile build artifacts
+jobflow_mobile/build/
+jobflow_mobile/.dart_tool/
+jobflow_mobile/.flutter-plugins*

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>4. Indra Matrix</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--deep:#002B3A;--dark:#003E50;--primary:#06596E;--secondary:#346679;--cyan:#00B0BD;--teal:#3F96AE;--light:#7A9CAE;--sky:#BADFF3;--success:#27AE60;--warning:#FF9800;--error:#E91E63;--gold:#FFC107}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#0a0e14;min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:24px}
+.label{text-align:center;margin-bottom:16px}.label h2{color:#fff;font-size:22px}.label p{color:var(--light);font-size:13px}
+.phone{width:375px;height:812px;border-radius:44px;border:6px solid #1a2332;overflow:hidden;background:var(--deep);position:relative;box-shadow:0 30px 60px rgba(0,0,0,.6)}
+.notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:150px;height:34px;background:#1a2332;border-radius:0 0 20px 20px;z-index:10}
+.screen{padding:48px 16px 100px;height:100%;overflow-y:auto;scrollbar-width:none}.screen::-webkit-scrollbar{display:none}
+
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding:0 4px}
+.topbar-left{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--light);letter-spacing:.06em}
+.topbar-left b{color:var(--cyan)}
+.topbar-right{display:flex;gap:8px;align-items:center}
+.chip{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 8px;border-radius:2px;font-family:'JetBrains Mono',monospace}
+.chip.live{color:var(--success);background:rgba(39,174,96,.12);border:1px solid rgba(39,174,96,.2)}
+
+/* Grid of tiles */
+.tile-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px}
+.tile{background:var(--dark);border:1px solid rgba(255,255,255,.04);padding:12px 10px;text-align:center}
+.tile-val{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:#fff;line-height:1}
+.tile-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:var(--light);margin-top:4px}
+.tile-delta{font-size:9px;font-weight:600;margin-top:4px;font-family:'JetBrains Mono',monospace}
+.tile-delta.up{color:var(--success)}.tile-delta.dn{color:var(--error)}
+
+/* Wide panel */
+.wide-tile{background:var(--dark);border:1px solid rgba(255,255,255,.04);padding:14px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.wt-left .wt-label{font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--light)}
+.wt-left .wt-val{font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:700;color:#fff;line-height:1;margin-top:4px}
+.wt-left .wt-sub{font-size:10px;color:var(--teal);margin-top:4px}
+.wt-right{display:flex;align-items:flex-end;gap:3px;height:40px}
+.wt-bar{width:8px;background:var(--primary);border-radius:1px 1px 0 0}
+.wt-bar:last-child{background:var(--cyan);box-shadow:0 0 8px rgba(0,176,189,.4)}
+
+/* Table-like rows */
+.tbl-head{font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--light);display:grid;grid-template-columns:2fr 1fr 1fr;padding:8px 10px;border-bottom:1px solid var(--secondary);margin-top:8px}
+.tbl-row{display:grid;grid-template-columns:2fr 1fr 1fr;padding:10px;border-bottom:1px solid rgba(255,255,255,.03);align-items:center}
+.tbl-row:nth-child(odd){background:rgba(0,43,58,.3)}
+.tbl-name{font-size:12px;font-weight:600;color:#fff}
+.tbl-co{font-size:10px;color:var(--light);margin-top:1px}
+.tbl-env{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;color:var(--light)}
+.tbl-status{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:3px 8px;border-radius:2px;display:inline-flex;align-items:center;gap:4px}
+.tbl-status::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}
+.tbl-status.s{color:var(--success);background:rgba(39,174,96,.1)}
+.tbl-status.w{color:var(--warning);background:rgba(255,152,0,.1)}
+.tbl-status.e{color:var(--error);background:rgba(233,30,99,.1)}
+
+.bottom-nav{position:absolute;bottom:0;left:0;right:0;height:80px;background:var(--deep);border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-around;align-items:center;padding-bottom:16px}
+.nav-i{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--light);font-size:9px;font-weight:500}.nav-i.active{color:var(--cyan)}.nav-i .ic{font-size:18px}
+</style>
+</head><body>
+<div>
+<div class="label"><h2>4. Indra Matrix</h2><p>Data-Dense Grid • Terminal Aesthetic • JetBrains Mono</p></div>
+<div class="phone"><div class="notch"></div><div class="screen">
+
+<div class="topbar">
+<div class="topbar-left"><b>JOBFLOW</b> // MATRIX v3.0</div>
+<div class="topbar-right"><div class="chip live">● LIVE</div></div>
+</div>
+
+<div class="wide-tile">
+<div class="wt-left"><div class="wt-label">DOMINANCE INDEX</div><div class="wt-val"><span data-count="87" data-suffix=".0">0</span></div><div class="wt-sub">▲ TOP 1% GLOBAL</div></div>
+<div class="wt-right"><div class="wt-bar" style="height:35%"></div><div class="wt-bar" style="height:45%"></div><div class="wt-bar" style="height:55%"></div><div class="wt-bar" style="height:50%"></div><div class="wt-bar" style="height:65%"></div><div class="wt-bar" style="height:75%"></div><div class="wt-bar" style="height:90%"></div></div>
+</div>
+
+<div class="tile-grid">
+<div class="tile"><div class="tile-val" data-count="847">0</div><div class="tile-lbl">SENT</div><div class="tile-delta up">+12%</div></div>
+<div class="tile"><div class="tile-val" data-count="34" data-suffix="%">0</div><div class="tile-lbl">RESP</div><div class="tile-delta up">+5%</div></div>
+<div class="tile"><div class="tile-val" data-count="12">0</div><div class="tile-lbl">INTV</div><div class="tile-delta up">+22%</div></div>
+<div class="tile"><div class="tile-val" data-count="3">0</div><div class="tile-lbl">OFFER</div><div class="tile-delta up">+1</div></div>
+<div class="tile"><div class="tile-val" data-count="301" data-suffix="ms">0</div><div class="tile-lbl">SPEED</div><div class="tile-delta dn">-8%</div></div>
+<div class="tile"><div class="tile-val" data-count="99" data-suffix="%">0</div><div class="tile-lbl">COMPL</div><div class="tile-delta up">AA</div></div>
+</div>
+
+<div class="tbl-head"><span>TARGET</span><span>STAGE</span><span>STATUS</span></div>
+<div class="tbl-row"><div><div class="tbl-name">VP Engineering</div><div class="tbl-co">MSFT // SEA</div></div><div class="tbl-env">PHASE 3</div><div><span class="tbl-status s">Active</span></div></div>
+<div class="tbl-row"><div><div class="tbl-name">CTO</div><div class="tbl-co">STRP // RMT</div></div><div class="tbl-env">PHASE 1</div><div><span class="tbl-status w">Pending</span></div></div>
+<div class="tbl-row"><div><div class="tbl-name">Head of AI</div><div class="tbl-co">GOOG // ZRH</div></div><div class="tbl-env">PHASE 5</div><div><span class="tbl-status s">Offer</span></div></div>
+<div class="tbl-row"><div><div class="tbl-name">Dir. Platform</div><div class="tbl-co">META // LDN</div></div><div class="tbl-env">PHASE 2</div><div><span class="tbl-status e">Rejected</span></div></div>
+
+</div>
+<div class="bottom-nav">
+<div class="nav-i active"><div class="ic">◻</div>Matrix</div>
+<div class="nav-i"><div class="ic">☰</div>Registry</div>
+<div class="nav-i"><div class="ic" style="font-size:24px;color:var(--cyan)">⊕</div></div>
+<div class="nav-i"><div class="ic">💬</div>Claire</div>
+<div class="nav-i"><div class="ic">⚙</div>Config</div>
+</div>
+</div></div>
+
+<script>
+function ac(el,t,s){const st=performance.now(),d=1800;function tk(n){const p=Math.min((n-st)/d,1),e=1-Math.pow(1-p,3);el.textContent=Math.round(t*e).toLocaleString()+s;if(p<1)requestAnimationFrame(tk)}requestAnimationFrame(tk)}
+document.querySelectorAll('[data-count]').forEach(el=>{const t=parseInt(el.dataset.count),s=el.dataset.suffix||'';ac(el,t,s)});
+</script>
+</body></html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>1. Indra Command</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--deep:#002B3A;--dark:#003E50;--primary:#06596E;--secondary:#346679;--cyan:#00B0BD;--teal:#3F96AE;--light:#7A9CAE;--blue-gray:#B3C1DA;--sky:#BADFF3;--warm-gray:#B0B4BD;--off-white:#F2F5F6;--success:#27AE60;--warning:#FF9800;--error:#E91E63;--gold:#FFC107}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#0a0e14;min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:24px}
+.label{text-align:center;margin-bottom:16px}
+.label h2{color:#fff;font-size:22px;font-weight:700}.label p{color:var(--light);font-size:13px}
+.phone{width:375px;height:812px;border-radius:44px;border:6px solid #1a2332;overflow:hidden;background:var(--deep);position:relative;box-shadow:0 30px 60px rgba(0,0,0,.6)}
+.notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:150px;height:34px;background:#1a2332;border-radius:0 0 20px 20px;z-index:10}
+.screen{padding:48px 20px 100px;height:100%;overflow-y:auto;scrollbar-width:none}
+.screen::-webkit-scrollbar{display:none}
+
+/* Header */
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.greeting{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--light);font-weight:500}
+.name{font-size:22px;font-weight:700;color:#fff;margin-top:2px}
+.name span{color:var(--cyan)}
+.avatar{width:40px;height:40px;background:var(--dark);border:2px solid var(--cyan);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--cyan)}
+
+/* KPI Cards */
+.kpi-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.kpi{background:rgba(0,62,80,.4);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:16px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--cyan)}
+.kpi-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--light);margin-bottom:6px}
+.kpi-val{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:#fff;line-height:1}
+.kpi-change{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;margin-top:6px;padding:2px 8px;border-radius:99px}
+.kpi-change.up{color:var(--success);background:rgba(39,174,96,.12)}
+.kpi-change.down{color:var(--error);background:rgba(233,30,99,.12)}
+
+/* Chart area */
+.chart-panel{background:var(--dark);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:16px;margin-bottom:20px}
+.chart-title{font-size:13px;font-weight:600;color:#fff;margin-bottom:4px}
+.chart-sub{font-size:10px;color:var(--light);margin-bottom:12px}
+.chart-area{height:120px;position:relative}
+.chart-area canvas{width:100%;height:100%}
+
+/* Pipeline items */
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.section-head h3{font-size:13px;font-weight:600;color:#fff}
+.section-head span{font-size:10px;color:var(--cyan);text-transform:uppercase;letter-spacing:.05em;font-weight:600;cursor:pointer}
+.pipe-item{background:var(--dark);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.pipe-name{font-size:14px;font-weight:600;color:#fff}
+.pipe-company{font-size:11px;color:var(--light);margin-top:2px}
+.pipe-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:4px 10px;border-radius:99px}
+.pipe-badge.interview{color:var(--cyan);background:rgba(0,176,189,.12)}
+.pipe-badge.applied{color:var(--warning);background:rgba(255,152,0,.12)}
+.pipe-badge.offer{color:var(--success);background:rgba(39,174,96,.12)}
+
+/* Bottom nav */
+.bottom-nav{position:absolute;bottom:0;left:0;right:0;height:80px;background:var(--deep);border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-around;align-items:center;padding-bottom:16px}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--light);font-size:10px;font-weight:500;cursor:pointer;transition:color .2s}
+.nav-item.active{color:var(--cyan)}
+.nav-item .icon{font-size:20px}
+</style>
+</head><body>
+<div>
+<div class="label"><h2>1. Indra Command</h2><p>Faithful DSS Translation • Corporate Precision</p></div>
+<div class="phone">
+<div class="notch"></div>
+<div class="screen">
+<div class="header">
+<div><div class="greeting">PORTFOLIO OVERVIEW</div><div class="name">Manoel <span>Benicio</span></div></div>
+<div class="avatar">MB</div>
+</div>
+
+<div class="kpi-row">
+<div class="kpi"><div class="kpi-label">DOMINANCE</div><div class="kpi-val" data-count="87" data-suffix="%">0%</div><div class="kpi-change up">▲ 2.1%</div></div>
+<div class="kpi"><div class="kpi-label">APPLICATIONS</div><div class="kpi-val" data-count="847">0</div><div class="kpi-change up">▲ 12.4%</div></div>
+<div class="kpi"><div class="kpi-label">RESPONSE RATE</div><div class="kpi-val" data-count="34" data-suffix="%">0%</div><div class="kpi-change up">▲ 5.2%</div></div>
+<div class="kpi"><div class="kpi-label">INTERVIEWS</div><div class="kpi-val" data-count="12">0</div><div class="kpi-change up">▲ 22.6%</div></div>
+</div>
+
+<div class="chart-panel">
+<div class="chart-title">Application Trend</div>
+<div class="chart-sub">Jan — Apr 2026</div>
+<div class="chart-area"><canvas id="chart"></canvas></div>
+</div>
+
+<div class="section-head"><h3>Active Pipelines</h3><span>View All →</span></div>
+<div class="pipe-item"><div><div class="pipe-name">VP of Engineering</div><div class="pipe-company">Microsoft • Seattle</div></div><div class="pipe-badge interview">Interview</div></div>
+<div class="pipe-item"><div><div class="pipe-name">CTO</div><div class="pipe-company">Stripe • Remote</div></div><div class="pipe-badge applied">Applied</div></div>
+<div class="pipe-item"><div><div class="pipe-name">Head of AI</div><div class="pipe-company">Google • Zürich</div></div><div class="pipe-badge offer">Offer</div></div>
+</div>
+
+<div class="bottom-nav">
+<div class="nav-item active"><div class="icon">◻</div>Dashboard</div>
+<div class="nav-item"><div class="icon">☰</div>Jobs</div>
+<div class="nav-item"><div class="icon" style="font-size:28px;color:var(--cyan)">⊕</div></div>
+<div class="nav-item"><div class="icon">💬</div>Claire</div>
+<div class="nav-item"><div class="icon">⚙</div>Settings</div>
+</div>
+</div>
+</div>
+
+<script>
+function animateCounter(el,target,suffix){const start=performance.now(),dur=1800;function tick(now){const p=Math.min((now-start)/dur,1),e=1-Math.pow(1-p,3);el.textContent=Math.round(target*e).toLocaleString()+suffix;if(p<1)requestAnimationFrame(tick)}requestAnimationFrame(tick)}
+document.querySelectorAll('[data-count]').forEach(el=>{const t=parseInt(el.dataset.count),s=el.dataset.suffix||'';animateCounter(el,t,s)});
+
+const c=document.getElementById('chart'),ctx=c.getContext('2d');
+function draw(){c.width=c.parentElement.offsetWidth;c.height=c.parentElement.offsetHeight;
+const w=c.width,h=c.height,d=[38,55,48,72,65,84,91,95,102,112,128],mx=Math.max(...d)*1.2;
+const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'rgba(0,176,189,.25)');g.addColorStop(1,'rgba(0,176,189,.01)');
+ctx.beginPath();d.forEach((v,i)=>{const x=(w/(d.length-1))*i,y=h-(v/mx)*h;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y)});
+ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.closePath();ctx.fillStyle=g;ctx.fill();
+ctx.beginPath();d.forEach((v,i)=>{const x=(w/(d.length-1))*i,y=h-(v/mx)*h;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y)});
+ctx.strokeStyle='#00B0BD';ctx.lineWidth=2;ctx.stroke();
+d.forEach((v,i)=>{const x=(w/(d.length-1))*i,y=h-(v/mx)*h;ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fillStyle='#00B0BD';ctx.fill()})}
+draw();window.addEventListener('resize',draw);
+</script>
+</body></html>

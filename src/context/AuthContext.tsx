@@ -9,6 +9,7 @@ import {
   type User,
 } from 'firebase/auth'
 import { auth, googleProvider } from '@/lib/firebase'
+import { migrateDataToFirestore } from '@/lib/migration'
 
 /* ─── Types ──────────────────────────────────────────── */
 
@@ -38,8 +39,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser)
+      // One-time migration from localStorage to Firestore
+      if (currentUser) {
+        const migrated = localStorage.getItem(`jobflow-${currentUser.uid}-migrated`)
+        if (!migrated) {
+          await migrateDataToFirestore(currentUser.uid)
+        }
+      }
       setLoading(false)
     })
     return unsubscribe

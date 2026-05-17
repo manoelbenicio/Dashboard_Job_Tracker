@@ -10,17 +10,15 @@ JobFlow is a premium, agentic job application tracker that combines an executive
 
 A user can track their job applications through a visually stunning, data-rich interface and receive AI-powered assistance (cover letters, resume analysis, interview prep, career coaching) at every stage of their job search — all behind secure Firebase Authentication and deployed to the cloud.
 
-## Current Milestone: v3.1 Indra Design System — Layout & Palette Decoupling
+## Current Milestone: v4.0 Clean Architecture & Advanced Polish
 
-**Goal:** Implement all 5 Indra dashboard layouts (Command, Pulse, Glass, Matrix, Aurora) as distinct full-featured screens and decouple color palette selection from layout selection, enabling independent switching of each dimension.
+**Goal:** Transition the codebase to a modular, domain-driven structure while implementing Fortune 500-grade advanced animations, tablet/desktop responsive adaptations, and native platform integrations.
 
 **Target features:**
-- Restore missing API key input field in Settings screen
-- Implement 5 distinct dashboard layouts with unique KPI arrangements, typography, and widget structures
-- Decouple Layout Selector from Color Palette Selector into two independent controls
-- Each layout must have its own KPI cards, counters, charts, and feed sections per mockups
-- Color palette changes only swap colors — layout structure, KPIs, and data remain AS IS
-- Both choices persisted independently via SharedPreferences
+- Complete the Clean Architecture overhaul (Domain/Data/Presentation layers)
+- Implement advanced Hero transitions, staggered lists, and micro-interactions
+- Support seamless responsive breakpoints for Tablet and Desktop viewports
+- Implement native platform channels (deep linking, native share sheets)
 
 ## Requirements
 
@@ -111,4 +109,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-16 — Starting Milestone v2.0*
+*Last updated: 2026-05-17 — Starting Milestone v4.0*

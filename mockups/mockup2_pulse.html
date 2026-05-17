@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2. Indra Pulse</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--deep:#002B3A;--dark:#003E50;--primary:#06596E;--secondary:#346679;--cyan:#00B0BD;--teal:#3F96AE;--light:#7A9CAE;--sky:#BADFF3;--success:#27AE60;--warning:#FF9800;--error:#E91E63;--gold:#FFC107}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#0a0e14;min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:24px}
+.label{text-align:center;margin-bottom:16px}.label h2{color:#fff;font-size:22px}.label p{color:var(--light);font-size:13px}
+.phone{width:375px;height:812px;border-radius:44px;border:6px solid #1a2332;overflow:hidden;background:var(--deep);position:relative;box-shadow:0 30px 60px rgba(0,0,0,.6)}
+.notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:150px;height:34px;background:#1a2332;border-radius:0 0 20px 20px;z-index:10}
+.screen{padding:48px 20px 100px;height:100%;overflow-y:auto;scrollbar-width:none}.screen::-webkit-scrollbar{display:none}
+
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.status-bar{display:flex;align-items:center;gap:8px}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.status-text{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--cyan);font-weight:600}
+.avatar{width:36px;height:36px;border:2px solid var(--cyan);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--cyan);background:var(--dark)}
+
+/* Hero KPI — Bloomberg-style */
+.hero-kpi{text-align:center;padding:28px 0 20px;position:relative}
+.hero-kpi::after{content:'';position:absolute;bottom:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent)}
+.hero-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--light);font-weight:500;margin-bottom:8px}
+.hero-val{font-family:'JetBrains Mono',monospace;font-size:72px;font-weight:700;color:#fff;line-height:1;text-shadow:0 0 40px rgba(0,176,189,.3)}
+.hero-suffix{font-size:28px;color:var(--cyan);font-weight:300}
+.hero-delta{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:600;color:var(--success);margin-top:8px}
+
+/* Sparkline row */
+.spark-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:20px 0}
+.spark-card{background:var(--dark);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:12px}
+.spark-label{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--light);font-weight:600}
+.spark-val{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:#fff;margin:4px 0}
+.spark-line{height:24px;display:flex;align-items:flex-end;gap:2px}
+.spark-bar{flex:1;background:var(--primary);border-radius:1px;transition:height .5s}
+.spark-bar:last-child{background:var(--cyan);box-shadow:0 0 6px rgba(0,176,189,.5)}
+
+/* Feed */
+.feed-title{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--light);font-weight:700;margin:20px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--secondary)}
+.feed-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.feed-dot{width:6px;height:6px;border-radius:50%;margin-top:6px;flex-shrink:0}
+.feed-dot.s{background:var(--success)}.feed-dot.w{background:var(--warning)}.feed-dot.c{background:var(--cyan)}
+.feed-text{font-size:12px;color:var(--light);line-height:1.5}.feed-text b{color:#fff;font-weight:500}
+.feed-time{font-size:10px;color:var(--secondary);margin-top:2px}
+
+.bottom-nav{position:absolute;bottom:0;left:0;right:0;height:80px;background:var(--deep);border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-around;align-items:center;padding-bottom:16px}
+.nav-i{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--light);font-size:9px;font-weight:500}
+.nav-i.active{color:var(--cyan)}.nav-i .ic{font-size:18px}
+</style>
+</head><body>
+<div>
+<div class="label"><h2>2. Indra Pulse</h2><p>Bloomberg Terminal Meets Mobile • Data-First</p></div>
+<div class="phone"><div class="notch"></div><div class="screen">
+
+<div class="header">
+<div class="status-bar"><div class="status-dot"></div><div class="status-text">Live • Market Open</div></div>
+<div class="avatar">MB</div>
+</div>
+
+<div class="hero-kpi">
+<div class="hero-label">MARKET DOMINANCE INDEX</div>
+<div class="hero-val"><span data-count="87" data-suffix="">0</span><span class="hero-suffix">%</span></div>
+<div class="hero-delta">▲ +2.4% vs last quarter</div>
+</div>
+
+<div class="spark-row">
+<div class="spark-card">
+<div class="spark-label">SENT</div>
+<div class="spark-val" data-count="847">0</div>
+<div class="spark-line"><div class="spark-bar" style="height:40%"></div><div class="spark-bar" style="height:55%"></div><div class="spark-bar" style="height:48%"></div><div class="spark-bar" style="height:72%"></div><div class="spark-bar" style="height:90%"></div></div>
+</div>
+<div class="spark-card">
+<div class="spark-label">RESPONSE</div>
+<div class="spark-val" data-count="34" data-suffix="%">0%</div>
+<div class="spark-line"><div class="spark-bar" style="height:30%"></div><div class="spark-bar" style="height:45%"></div><div class="spark-bar" style="height:55%"></div><div class="spark-bar" style="height:50%"></div><div class="spark-bar" style="height:70%"></div></div>
+</div>
+<div class="spark-card">
+<div class="spark-label">OFFERS</div>
+<div class="spark-val" data-count="3">0</div>
+<div class="spark-line"><div class="spark-bar" style="height:20%"></div><div class="spark-bar" style="height:20%"></div><div class="spark-bar" style="height:40%"></div><div class="spark-bar" style="height:60%"></div><div class="spark-bar" style="height:80%"></div></div>
+</div>
+</div>
+
+<div class="feed-title">REAL-TIME FEED</div>
+<div class="feed-item"><div class="feed-dot s"></div><div><div class="feed-text"><b>VP Engineering</b> — Microsoft moved to <b>Interview Round 3</b></div><div class="feed-time">14 min ago</div></div></div>
+<div class="feed-item"><div class="feed-dot c"></div><div><div class="feed-text">Claire AI generated <b>tailored cover letter</b> for Stripe CTO role</div><div class="feed-time">1 hr ago</div></div></div>
+<div class="feed-item"><div class="feed-dot w"></div><div><div class="feed-text"><b>Head of AI</b> at Google — application deadline in <b>48h</b></div><div class="feed-time">3 hrs ago</div></div></div>
+<div class="feed-item"><div class="feed-dot s"></div><div><div class="feed-text">Benchmark score updated: <b>Top 1%</b> global ranking achieved</div><div class="feed-time">5 hrs ago</div></div></div>
+
+</div>
+<div class="bottom-nav">
+<div class="nav-i active"><div class="ic">◻</div>Pulse</div>
+<div class="nav-i"><div class="ic">☰</div>Pipeline</div>
+<div class="nav-i"><div class="ic" style="font-size:26px;color:var(--cyan)">⊕</div></div>
+<div class="nav-i"><div class="ic">💬</div>Claire</div>
+<div class="nav-i"><div class="ic">⚙</div>More</div>
+</div>
+</div></div>
+
+<script>
+function ac(el,t,s){const st=performance.now(),d=1800;function tk(n){const p=Math.min((n-st)/d,1),e=1-Math.pow(1-p,3);el.textContent=Math.round(t*e).toLocaleString()+s;if(p<1)requestAnimationFrame(tk)}requestAnimationFrame(tk)}
+document.querySelectorAll('[data-count]').forEach(el=>{const t=parseInt(el.dataset.count),s=el.dataset.suffix||'';ac(el,t,s)});
+</script>
+</body></html>

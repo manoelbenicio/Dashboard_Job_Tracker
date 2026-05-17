@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>5. Indra Aurora</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--deep:#002B3A;--dark:#003E50;--primary:#06596E;--secondary:#346679;--cyan:#00B0BD;--teal:#3F96AE;--light:#7A9CAE;--sky:#BADFF3;--blue-gray:#B3C1DA;--success:#27AE60;--warning:#FF9800;--error:#E91E63;--gold:#FFC107}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#0a0e14;min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:24px}
+.label{text-align:center;margin-bottom:16px}.label h2{color:#fff;font-size:22px}.label p{color:var(--light);font-size:13px}
+.phone{width:375px;height:812px;border-radius:44px;border:6px solid #1a2332;overflow:hidden;position:relative;box-shadow:0 30px 60px rgba(0,0,0,.6);background:linear-gradient(160deg,var(--deep) 0%,var(--primary) 100%)}
+.notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:150px;height:34px;background:#1a2332;border-radius:0 0 20px 20px;z-index:10}
+.screen{padding:48px 20px 100px;height:100%;overflow-y:auto;scrollbar-width:none}.screen::-webkit-scrollbar{display:none}
+
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--cyan),var(--sky));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--deep)}
+.logo-text{font-size:16px;font-weight:600;color:#fff}.logo-text span{color:var(--sky);font-weight:300}
+.avatar-ring{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--sky));padding:2px;cursor:pointer}
+.avatar-inner{width:100%;height:100%;border-radius:50%;background:var(--dark);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--sky)}
+
+/* Luminous hero card */
+.aurora-hero{background:linear-gradient(135deg,rgba(0,62,80,.6),rgba(6,89,110,.4));backdrop-filter:blur(20px);border:1px solid rgba(186,223,243,.15);border-radius:24px;padding:28px 24px;margin-bottom:20px;position:relative;overflow:hidden}
+.aurora-hero::before{content:'';position:absolute;top:-50%;right:-30%;width:200px;height:200px;background:radial-gradient(circle,rgba(186,223,243,.15),transparent 70%);border-radius:50%}
+.aurora-hero::after{content:'';position:absolute;bottom:-30%;left:-20%;width:160px;height:160px;background:radial-gradient(circle,rgba(0,176,189,.1),transparent 70%);border-radius:50%}
+.ah-row{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1}
+.ah-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--sky);font-weight:600;margin-bottom:6px}
+.ah-val{font-family:'JetBrains Mono',monospace;font-size:64px;font-weight:700;color:#fff;line-height:1;text-shadow:0 0 60px rgba(186,223,243,.2)}
+.ah-suffix{font-size:24px;color:var(--sky);font-weight:300}
+.ah-rank{background:rgba(186,223,243,.1);border:1px solid rgba(186,223,243,.2);border-radius:12px;padding:8px 12px;text-align:center}
+.ah-rank-val{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--sky)}
+.ah-rank-lbl{font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:var(--light);margin-top:2px}
+.ah-trend{display:flex;align-items:center;gap:6px;margin-top:12px;position:relative;z-index:1}
+.ah-trend-pill{font-size:11px;font-weight:600;color:var(--success);background:rgba(39,174,96,.12);padding:3px 10px;border-radius:99px}
+.ah-trend-text{font-size:11px;color:var(--blue-gray)}
+
+/* Metric strip */
+.metric-strip{display:flex;gap:0;margin-bottom:20px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.06)}
+.ms-item{flex:1;padding:14px 8px;text-align:center;background:rgba(0,62,80,.3);border-right:1px solid rgba(255,255,255,.04)}
+.ms-item:last-child{border-right:none}
+.ms-val{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:#fff}
+.ms-lbl{font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:var(--light);margin-top:3px;font-weight:600}
+
+/* Kanban preview */
+.kanban-title{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--sky);font-weight:700;margin-bottom:12px}
+.kanban-scroll{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+.kanban-scroll::-webkit-scrollbar{display:none}
+.kanban-col{min-width:140px;flex-shrink:0}
+.kc-head{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--light);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.kc-head .dot{width:6px;height:6px;border-radius:50%}
+.kc-card{background:rgba(0,62,80,.4);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:10px;margin-bottom:8px}
+.kc-card-name{font-size:12px;font-weight:600;color:#fff}
+.kc-card-co{font-size:10px;color:var(--light);margin-top:2px}
+.kc-card-tag{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-top:6px;padding:2px 6px;border-radius:3px;display:inline-block}
+.kc-card-tag.hot{color:var(--gold);background:rgba(255,193,7,.1)}
+.kc-card-tag.new{color:var(--cyan);background:rgba(0,176,189,.1)}
+
+/* Bottom nav with gradient */
+.bottom-nav{position:absolute;bottom:0;left:0;right:0;height:84px;background:linear-gradient(0deg,rgba(0,43,58,.95),rgba(0,43,58,.8));backdrop-filter:blur(20px);border-top:1px solid rgba(186,223,243,.08);display:flex;justify-content:space-around;align-items:center;padding-bottom:18px}
+.nav-i{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--light);font-size:9px;font-weight:500;position:relative}
+.nav-i.active{color:var(--sky)}
+.nav-i.active::before{content:'';position:absolute;top:-12px;width:24px;height:3px;background:linear-gradient(90deg,var(--cyan),var(--sky));border-radius:0 0 3px 3px}
+.nav-i .ic{font-size:18px}
+.nav-fab{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--cyan),var(--sky));display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--deep);font-weight:300;box-shadow:0 6px 20px rgba(0,176,189,.4);margin-top:-20px}
+</style>
+</head><body>
+<div>
+<div class="label"><h2>5. Indra Aurora</h2><p>Luminous Gradients • Sky Accents • Futuristic Warmth</p></div>
+<div class="phone"><div class="notch"></div><div class="screen">
+
+<div class="header">
+<div class="logo"><div class="logo-icon">JF</div><div class="logo-text">Job<span>Flow</span></div></div>
+<div class="avatar-ring"><div class="avatar-inner">MB</div></div>
+</div>
+
+<div class="aurora-hero">
+<div class="ah-row">
+<div><div class="ah-label">DOMINANCE PROBABILITY</div><div class="ah-val"><span data-count="87">0</span><span class="ah-suffix">%</span></div></div>
+<div class="ah-rank"><div class="ah-rank-val" data-count="1" data-suffix="%">0</div><div class="ah-rank-lbl">TOP GLOBAL</div></div>
+</div>
+<div class="ah-trend"><div class="ah-trend-pill">▲ +2.4%</div><div class="ah-trend-text">vs last quarter</div></div>
+</div>
+
+<div class="metric-strip">
+<div class="ms-item"><div class="ms-val" data-count="847">0</div><div class="ms-lbl">SENT</div></div>
+<div class="ms-item"><div class="ms-val" data-count="34" data-suffix="%">0</div><div class="ms-lbl">RESPONSE</div></div>
+<div class="ms-item"><div class="ms-val" data-count="12">0</div><div class="ms-lbl">INTERVIEWS</div></div>
+<div class="ms-item"><div class="ms-val" data-count="3">0</div><div class="ms-lbl">OFFERS</div></div>
+</div>
+
+<div class="kanban-title">PIPELINE BOARD</div>
+<div class="kanban-scroll">
+<div class="kanban-col">
+<div class="kc-head"><div class="dot" style="background:var(--warning)"></div>APPLIED (4)</div>
+<div class="kc-card"><div class="kc-card-name">CTO</div><div class="kc-card-co">Stripe</div><div class="kc-card-tag new">NEW</div></div>
+<div class="kc-card"><div class="kc-card-name">Dir. Platform</div><div class="kc-card-co">Meta</div></div>
+</div>
+<div class="kanban-col">
+<div class="kc-head"><div class="dot" style="background:var(--cyan)"></div>INTERVIEW (2)</div>
+<div class="kc-card"><div class="kc-card-name">VP Engineering</div><div class="kc-card-co">Microsoft</div><div class="kc-card-tag hot">★ HOT</div></div>
+</div>
+<div class="kanban-col">
+<div class="kc-head"><div class="dot" style="background:var(--success)"></div>OFFER (3)</div>
+<div class="kc-card"><div class="kc-card-name">Head of AI</div><div class="kc-card-co">Google</div><div class="kc-card-tag hot">★ TOP</div></div>
+</div>
+</div>
+
+</div>
+<div class="bottom-nav">
+<div class="nav-i active"><div class="ic">◻</div>Home</div>
+<div class="nav-i"><div class="ic">☰</div>Pipeline</div>
+<div class="nav-fab">+</div>
+<div class="nav-i"><div class="ic">💬</div>Claire</div>
+<div class="nav-i"><div class="ic">👤</div>Profile</div>
+</div>
+</div></div>
+
+<script>
+function ac(el,t,s){const st=performance.now(),d=1800;function tk(n){const p=Math.min((n-st)/d,1),e=1-Math.pow(1-p,3);el.textContent=Math.round(t*e).toLocaleString()+s;if(p<1)requestAnimationFrame(tk)}requestAnimationFrame(tk)}
+document.querySelectorAll('[data-count]').forEach(el=>{const t=parseInt(el.dataset.count),s=el.dataset.suffix||'';ac(el,t,s)});
+</script>
+</body></html>

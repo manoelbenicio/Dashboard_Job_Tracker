@@ -206,7 +206,11 @@ export function DashboardPage() {
         </div>
         <ul className="indra-activity-list">
           {recentActivity.map((job) => (
-            <li key={job.id} className="indra-activity-item">
+            <li key={job.id} className="indra-activity-item" style={{ cursor: 'pointer', transition: 'background 0.15s', borderRadius: '6px', padding: '8px' }}
+              onClick={() => (window as any).__jobflow_viewJob?.(job.id)}
+              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,176,189,0.04)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+            >
               <span className={`indra-activity-dot ${statusToCss(job.status) === 'offer' ? 'success' : statusToCss(job.status) === 'rejected' ? 'error' : statusToCss(job.status) === 'interview' ? 'warning' : 'info'}`} />
               <div>
                 <div className="indra-activity-text">

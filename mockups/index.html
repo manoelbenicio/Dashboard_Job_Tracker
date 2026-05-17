@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JobFlow Mobile — 5 Design Options</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--deep:#002B3A;--dark:#003E50;--primary:#06596E;--secondary:#346679;--cyan:#00B0BD;--teal:#3F96AE;--light:#7A9CAE;--sky:#BADFF3;--off-white:#F2F5F6;--success:#27AE60;--gold:#FFC107}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--deep);color:#fff;min-height:100vh}
+
+.hero{text-align:center;padding:60px 24px 40px;background-image:radial-gradient(ellipse at 30% 70%,rgba(0,176,189,.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(63,150,174,.08) 0%,transparent 50%)}
+.hero .eyebrow{font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);margin-bottom:12px}
+.hero h1{font-size:clamp(28px,5vw,48px);font-weight:300;color:#fff;letter-spacing:-.02em;line-height:1.15}
+.hero h1 b{font-weight:700;color:var(--cyan)}
+.hero .sub{font-size:16px;color:var(--light);margin-top:12px;max-width:600px;margin-left:auto;margin-right:auto}
+
+.palette{display:flex;justify-content:center;gap:0;margin:32px auto 0;max-width:480px;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,.08)}
+.pal-swatch{flex:1;height:40px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.7);letter-spacing:.02em}
+.pal-swatch:nth-child(n+6){color:var(--deep);font-weight:500}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:32px;padding:40px 32px 60px;max-width:1400px;margin:0 auto}
+.card{background:var(--dark);border:1px solid rgba(255,255,255,.06);border-radius:12px;overflow:hidden;transition:transform .3s,box-shadow .3s;cursor:pointer;text-decoration:none;color:#fff}
+.card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,.4)}
+.card-img{height:420px;display:flex;align-items:center;justify-content:center;background:var(--deep);overflow:hidden;position:relative}
+.card-img iframe{width:375px;height:812px;border:none;border-radius:0;transform:scale(.5);transform-origin:center center;pointer-events:none}
+.card-body{padding:20px 24px}
+.card-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--cyan);font-weight:600;letter-spacing:.06em;margin-bottom:4px}
+.card-title{font-size:20px;font-weight:700;color:#fff;margin-bottom:6px}
+.card-desc{font-size:13px;color:var(--light);line-height:1.5}
+.card-tags{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.tag{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;padding:4px 10px;border-radius:99px;color:var(--cyan);background:rgba(0,176,189,.1);border:1px solid rgba(0,176,189,.15)}
+
+.footer{text-align:center;padding:24px;border-top:1px solid rgba(255,255,255,.06);font-size:12px;color:var(--light)}
+.footer b{color:var(--cyan)}
+
+.instructions{text-align:center;padding:0 24px 20px;max-width:700px;margin:0 auto}
+.instructions p{font-size:14px;color:var(--teal);background:rgba(0,176,189,.06);border:1px solid rgba(0,176,189,.12);padding:12px 20px;border-radius:8px;line-height:1.5}
+.instructions p b{color:var(--cyan)}
+</style>
+</head><body>
+
+<div class="hero">
+<div class="eyebrow">DSS-INDRAMIND-2026 · v3.0 · MOBILE DESIGN SELECTION</div>
+<h1>Choose Your <b>Mobile Design</b></h1>
+<div class="sub">5 premium options built exclusively from the 12 Canonical Indra Swatches. All include animated KPI counters, Inter + JetBrains Mono typography, and Fortune 500 precision.</div>
+<div class="palette">
+<div class="pal-swatch" style="background:#002B3A">Deep</div>
+<div class="pal-swatch" style="background:#003E50">Dark</div>
+<div class="pal-swatch" style="background:#06596E">Primary</div>
+<div class="pal-swatch" style="background:#346679">Secondary</div>
+<div class="pal-swatch" style="background:#00B0BD">Cyan</div>
+<div class="pal-swatch" style="background:#3F96AE">Teal</div>
+<div class="pal-swatch" style="background:#7A9CAE">Light</div>
+<div class="pal-swatch" style="background:#BADFF3">Sky</div>
+<div class="pal-swatch" style="background:#F2F5F6">Off-White</div>
+</div>
+</div>
+
+<div class="instructions">
+<p>⚡ <b>Click any card</b> to open the full-size interactive mockup with live animated counters. Review all 5, then reply with your choice number.</p>
+</div>
+
+<div class="grid">
+<a class="card" href="mockup1_command.html" target="_blank">
+<div class="card-img"><iframe src="mockup1_command.html" loading="lazy"></iframe></div>
+<div class="card-body">
+<div class="card-num">OPTION 01</div>
+<div class="card-title">Indra Command</div>
+<div class="card-desc">Faithful translation of the DSS dashboard into mobile. Cyan left-border KPIs, area chart, pipeline list. Corporate precision.</div>
+<div class="card-tags"><div class="tag">Dashboard First</div><div class="tag">Charts</div><div class="tag">Corporate</div></div>
+</div>
+</a>
+
+<a class="card" href="mockup2_pulse.html" target="_blank">
+<div class="card-img"><iframe src="mockup2_pulse.html" loading="lazy"></iframe></div>
+<div class="card-body">
+<div class="card-num">OPTION 02</div>
+<div class="card-title">Indra Pulse</div>
+<div class="card-desc">Bloomberg Terminal meets mobile. Giant hero counter with glow, sparkline mini-bars, real-time feed. Data-first obsession.</div>
+<div class="card-tags"><div class="tag">Bloomberg Style</div><div class="tag">Live Feed</div><div class="tag">Sparklines</div></div>
+</div>
+</a>
+
+<a class="card" href="mockup3_glass.html" target="_blank">
+<div class="card-img"><iframe src="mockup3_glass.html" loading="lazy"></iframe></div>
+<div class="card-body">
+<div class="card-num">OPTION 03</div>
+<div class="card-title">Indra Glass</div>
+<div class="card-desc">Deep glassmorphism with layered blur, radial glow orbs, progress bars, FAB action button. Premium layered depth.</div>
+<div class="card-tags"><div class="tag">Glassmorphism</div><div class="tag">FAB Button</div><div class="tag">Premium</div></div>
+</div>
+</a>
+
+<a class="card" href="mockup4_matrix.html" target="_blank">
+<div class="card-img"><iframe src="mockup4_matrix.html" loading="lazy"></iframe></div>
+<div class="card-body">
+<div class="card-num">OPTION 04</div>
+<div class="card-title">Indra Matrix</div>
+<div class="card-desc">Data-dense 6-tile grid, table-like rows with status badges, JetBrains Mono everywhere. Terminal meets executive.</div>
+<div class="card-tags"><div class="tag">Data Dense</div><div class="tag">Terminal</div><div class="tag">Grid Heavy</div></div>
+</div>
+</a>
+
+<a class="card" href="mockup5_aurora.html" target="_blank">
+<div class="card-img"><iframe src="mockup5_aurora.html" loading="lazy"></iframe></div>
+<div class="card-body">
+<div class="card-num">OPTION 05</div>
+<div class="card-title">Indra Aurora</div>
+<div class="card-desc">Luminous gradient background (Deep→Primary), Sky-blue accents, kanban board preview, gradient FAB. Futuristic warmth.</div>
+<div class="card-tags"><div class="tag">Gradients</div><div class="tag">Kanban</div><div class="tag">Futuristic</div></div>
+</div>
+</a>
+</div>
+
+<div class="footer">DSS Universal Standard v3.0 · 12 Canonical Swatches · <b>No Substitution</b> · Inter + JetBrains Mono</div>
+
+</body></html>

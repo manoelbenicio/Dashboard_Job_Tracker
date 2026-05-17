@@ -121,7 +121,7 @@ export function ClaireChat() {
       }
 
       const response = await client.models.generateContent({
-        model: 'gemini-3.1-pro-preview',
+        model: 'gemini-3.1-flash-lite',
         contents: [{ role: 'user', parts }],
       })
 

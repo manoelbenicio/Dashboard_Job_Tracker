@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import {
   BarChart3, Activity, Sparkles, Briefcase, Users, TrendingUp,
   Download, Calendar, Clock, ArrowUpRight, ArrowDownRight,
@@ -79,23 +79,37 @@ function EventIcon({ category }: { category: string }) {
 /* ─── Main Page ─── */
 export function AnalyticsPage() {
   const [range, setRange] = useState(30)
-  const metrics: AnalyticsMetrics = useMemo(() => analytics.getMetrics(range), [range])
+  const [metrics, setMetrics] = useState<AnalyticsMetrics | null>(null)
+  
+  useEffect(() => {
+    let mounted = true
+    analytics.getMetrics(range).then(m => {
+      if (mounted) setMetrics(m)
+    })
+    return () => { mounted = false }
+  }, [range])
 
   const fmt = (n: number) => n >= 1000 ? `${(n / 1000).toFixed(1)}K` : n.toString()
 
   const pieData = useMemo(() => {
+    if (!metrics) return []
     const cats = ['jobs', 'ai', 'resume', 'kanban', 'settings']
     const labels: Record<string, string> = { jobs: 'Jobs', ai: 'AI Features', resume: 'Resume', kanban: 'Kanban', settings: 'Settings' }
     return cats.map(c => ({ name: labels[c] || c, value: metrics.eventsByCategory[c] || 0 })).filter(d => d.value > 0)
   }, [metrics])
 
-  const barData = useMemo(() =>
-    metrics.topActions.slice(0, 8).map(a => ({
+  const barData = useMemo(() => {
+    if (!metrics) return []
+    return metrics.topActions.slice(0, 8).map(a => ({
       name: a.action.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
       count: a.count, category: a.category,
-    })), [metrics])
+    }))
+  }, [metrics])
 
-  const areaData = useMemo(() => metrics.dailyEvents.map(d => ({ ...d, date: d.date.slice(5) })), [metrics])
+  const areaData = useMemo(() => {
+    if (!metrics) return []
+    return metrics.dailyEvents.map(d => ({ ...d, date: d.date.slice(5) }))
+  }, [metrics])
 
   const timeAgo = (ts: number) => {
     const diff = Date.now() - ts
@@ -105,13 +119,22 @@ export function AnalyticsPage() {
     return `${Math.floor(diff / 86400000)}d ago`
   }
 
+  const [historicalEvents, setHistoricalEvents] = useState<any[]>([])
+  useEffect(() => {
+    analytics.getEvents(undefined, range).then(setHistoricalEvents)
+  }, [range])
+
   const computeChange = (cat?: string) => {
-    const all = analytics.getEvents(cat, range)
+    const all = cat ? historicalEvents.filter(e => e.category === cat) : historicalEvents
     const mid = Date.now() - (range * 86400000 / 2)
     const first = all.filter(e => e.timestamp < mid).length
     const second = all.filter(e => e.timestamp >= mid).length
     if (first === 0) return second > 0 ? 100 : 0
     return Math.round(((second - first) / first) * 100)
+  }
+
+  if (!metrics) {
+    return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>Loading metrics...</div>
   }
 
   return (

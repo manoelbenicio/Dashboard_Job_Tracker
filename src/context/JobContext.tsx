@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useEffect, type ReactNode } from 'react'
+import { createContext, useContext, useReducer, useEffect, useState, type ReactNode } from 'react'
 import { Job, UserProfile, DEFAULT_PROFILE } from '@/types'
 import { loadJobs, saveJobs, loadProfile, saveProfile } from '@/lib/storage'
 import { generateId } from '@/lib/utils'
@@ -16,6 +16,7 @@ interface JobState {
 /* ─── Actions ──────────────────────────────────────────── */
 
 type JobAction =
+  | { type: 'SET_INITIAL_DATA'; payload: { jobs: Job[]; profile: UserProfile } }
   | { type: 'ADD_JOB'; payload: Omit<Job, 'id' | 'createdAt' | 'lastUpdated'> }
   | { type: 'UPDATE_JOB'; payload: Job }
   | { type: 'DELETE_JOB'; payload: string }
@@ -30,11 +31,14 @@ type JobAction =
 
 function jobReducer(state: JobState, action: JobAction): JobState {
   switch (action.type) {
+    case 'SET_INITIAL_DATA':
+      return { ...state, jobs: action.payload.jobs, profile: action.payload.profile }
     case 'ADD_JOB': {
       const now = new Date().toISOString()
       const newJob: Job = {
         ...action.payload,
         id: generateId(),
+        comments: action.payload.comments || [],
         createdAt: now,
         lastUpdated: now,
       }
@@ -82,6 +86,7 @@ interface JobContextType {
   dispatch: React.Dispatch<JobAction>
   filteredJobs: Job[]
   userUid: string
+  loading: boolean
 }
 
 const JobContext = createContext<JobContextType | null>(null)
@@ -95,17 +100,41 @@ export function useJobs() {
 /* ─── Provider ─────────────────────────────────────────── */
 
 export function JobProvider({ children, userUid }: { children: ReactNode; userUid: string }) {
+  const [loading, setLoading] = useState(true)
   const [state, dispatch] = useReducer(jobReducer, {
-    jobs: loadJobs(userUid),
-    profile: loadProfile(userUid),
+    jobs: [],
+    profile: DEFAULT_PROFILE,
     searchQuery: '',
     statusFilter: 'all',
     originFilter: 'all',
   })
 
-  // Persist on change — scoped to user UID
-  useEffect(() => { saveJobs(state.jobs, userUid) }, [state.jobs, userUid])
-  useEffect(() => { saveProfile(state.profile, userUid) }, [state.profile, userUid])
+  // Initial load
+  useEffect(() => {
+    async function init() {
+      setLoading(true)
+      const [loadedJobs, loadedProfile] = await Promise.all([
+        loadJobs(userUid),
+        loadProfile(userUid)
+      ])
+      dispatch({ type: 'SET_INITIAL_DATA', payload: { jobs: loadedJobs, profile: loadedProfile } })
+      setLoading(false)
+    }
+    init()
+  }, [userUid])
+
+  // Persist on change (skip saving initial empty state before load completes)
+  useEffect(() => {
+    if (!loading) {
+      saveJobs(state.jobs, userUid)
+    }
+  }, [state.jobs, userUid, loading])
+
+  useEffect(() => {
+    if (!loading) {
+      saveProfile(state.profile, userUid)
+    }
+  }, [state.profile, userUid, loading])
 
   // Compute filtered jobs
   const filteredJobs = state.jobs.filter(job => {
@@ -124,7 +153,7 @@ export function JobProvider({ children, userUid }: { children: ReactNode; userUi
   })
 
   return (
-    <JobContext.Provider value={{ state, dispatch, filteredJobs, userUid }}>
+    <JobContext.Provider value={{ state, dispatch, filteredJobs, userUid, loading }}>
       {children}
     </JobContext.Provider>
   )

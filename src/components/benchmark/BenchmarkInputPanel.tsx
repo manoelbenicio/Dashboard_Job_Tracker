@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react'
 import { Upload, Link2, Zap, FileText } from 'lucide-react'
 import { parseUploadedCV } from '@/lib/resumeService'
+import { loadResume } from '@/lib/storage'
+import { useJobs } from '@/context/JobContext'
 
 interface Props {
   jobUrl: string
@@ -17,6 +19,7 @@ interface Props {
 export function BenchmarkInputPanel(props: Props) {
   const { jobUrl, setJobUrl, jobDescription, setJobDescription, cvText, setCvText, cvFileName, setCvFileName, setError } = props
   const fileRef = useRef<HTMLInputElement>(null)
+  const { state, userUid } = useJobs()
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -38,10 +41,10 @@ export function BenchmarkInputPanel(props: Props) {
     }
   }
 
-  const useResumeBuilder = () => {
-    const saved = localStorage.getItem('jobflow-resume')
+  const useResumeBuilder = async () => {
+    const saved = await loadResume(userUid)
     if (!saved) return
-    const r = JSON.parse(saved)
+    const r = saved
     const text = [
       `# ${r.fullName}`, r.title, `${r.email} | ${r.phone} | ${r.location}`,
       '', r.summary, '',

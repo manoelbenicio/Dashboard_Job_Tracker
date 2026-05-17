@@ -10,6 +10,7 @@ import { SettingsPage } from '@/pages/SettingsPage'
 import { AnalyticsPage } from '@/pages/AnalyticsPage'
 import { BenchmarkPage } from '@/pages/BenchmarkPage'
 import { LoginPage } from '@/pages/LoginPage'
+import { JobDetailPage } from '@/pages/JobDetailPage'
 import { ClaireChat } from '@/components/ai/ClaireChat'
 import { analytics } from '@/lib/analytics'
 import { Loader2 } from 'lucide-react'
@@ -82,13 +83,27 @@ function AuthGate() {
 
 function AppShell({ user }: { user: any }) {
   const [activePage, setActivePage] = useState('dashboard')
+  const [selectedJobId, setSelectedJobId] = useState<string | null>(null)
 
   const handleNavigate = (page: string) => {
+    setSelectedJobId(null)
     setActivePage(page)
     analytics.track('navigation', 'page_view', page)
   }
 
+  const handleViewJob = (jobId: string) => {
+    setSelectedJobId(jobId)
+    setActivePage('jobDetail')
+    analytics.track('navigation', 'job_detail', jobId)
+  }
+
+  // Expose navigation for child components
+  ;(window as any).__jobflow_viewJob = handleViewJob
+
   const renderPage = () => {
+    if (activePage === 'jobDetail' && selectedJobId) {
+      return <JobDetailPage jobId={selectedJobId} onBack={() => handleNavigate('jobs')} />
+    }
     switch (activePage) {
       case 'dashboard': return <DashboardPage />
       case 'jobs': return <JobsPage />

@@ -13,8 +13,8 @@
 
 /* ═══ CONFIG ═══════════════════════════════════════════ */
 
-const GEMINI_PRIMARY_MODEL = 'gemini-2.5-flash'
-const GEMINI_FALLBACK_MODEL = 'gemini-2.0-flash'
+const GEMINI_PRIMARY_MODEL = 'gemini-3.1-pro-preview'
+const GEMINI_FALLBACK_MODEL = 'gemini-3.1-pro-preview'
 const OPENAI_MODEL = 'gpt-4o'
 const MAX_RETRIES = 3
 const BASE_DELAY_MS = 4000

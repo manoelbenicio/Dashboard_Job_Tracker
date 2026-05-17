@@ -1,11 +1,12 @@
-import { useState } from 'react'
-import { FileText, Download, User, Briefcase, GraduationCap, Award, Plus, X, Linkedin, Sparkles, Target, PenTool, Wand2 } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { FileText, Download, User, Briefcase, GraduationCap, Award, Plus, X, Linkedin, Sparkles, Target, PenTool, Wand2, Loader2 } from 'lucide-react'
 import { useJobs } from '@/context/JobContext'
 import { LinkedInImport } from '@/components/resume/LinkedInImport'
 import { CVJobMatcher } from '@/components/resume/CVJobMatcher'
 import { PositionMatcher } from '@/components/resume/PositionMatcher'
 import { ResumeExporter } from '@/components/resume/ResumeExporter'
 import { enhanceSection, type ParsedResume } from '@/lib/resumeService'
+import { loadResume, saveResume as saveResumeToDb } from '@/lib/storage'
 
 /* ─── Types ─── */
 interface ResumeData {
@@ -169,24 +170,43 @@ function EnhanceButton({ section, content, context, apiKey, onEnhance }: {
 
 /* ─── Resume Builder Page ─── */
 export function ResumePage() {
-  const { state } = useJobs()
+  const { state, userUid } = useJobs()
   const apiKey = state.profile.apiKey
   const [activeMode, setActiveMode] = useState('manual')
+  const [loading, setLoading] = useState(true)
 
-  const [resume, setResume] = useState<ResumeData>(() => {
-    const saved = localStorage.getItem('jobflow-resume')
-    if (saved) return JSON.parse(saved)
-    return {
-      fullName: state.profile.name || '', title: '', email: state.profile.email || '',
-      phone: '', location: '', summary: state.profile.summary || '',
-      experience: [{ company: '', role: '', period: '', bullets: [''] }],
-      education: [{ institution: '', degree: '', year: '' }],
-      skills: state.profile.skills.length > 0 ? state.profile.skills : [''],
-      certifications: [''],
-    }
+  const [resume, setResume] = useState<ResumeData>({
+    fullName: '', title: '', email: '', phone: '', location: '', summary: '',
+    experience: [{ company: '', role: '', period: '', bullets: [''] }],
+    education: [{ institution: '', degree: '', year: '' }],
+    skills: [''], certifications: [''],
   })
 
-  const saveResume = (updated: ResumeData) => { setResume(updated); localStorage.setItem('jobflow-resume', JSON.stringify(updated)) }
+  useEffect(() => {
+    async function init() {
+      setLoading(true)
+      const saved = await loadResume(userUid)
+      if (saved) {
+        setResume(saved)
+      } else {
+        setResume({
+          fullName: state.profile.name || '', title: '', email: state.profile.email || '',
+          phone: '', location: '', summary: state.profile.summary || '',
+          experience: [{ company: '', role: '', period: '', bullets: [''] }],
+          education: [{ institution: '', degree: '', year: '' }],
+          skills: state.profile.skills.length > 0 ? state.profile.skills : [''],
+          certifications: [''],
+        })
+      }
+      setLoading(false)
+    }
+    init()
+  }, [userUid, state.profile])
+
+  const saveResume = (updated: ResumeData) => { 
+    setResume(updated) 
+    saveResumeToDb(updated, userUid)
+  }
   const updateField = <K extends keyof ResumeData>(key: K, value: ResumeData[K]) => { saveResume({ ...resume, [key]: value }) }
 
   const handleImportData = (data: ParsedResume) => {

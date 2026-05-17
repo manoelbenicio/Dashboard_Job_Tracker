@@ -4,7 +4,7 @@ import { useJobs } from '@/context/JobContext'
 import { Job, JOB_STATUSES, type JobStatus } from '@/types'
 import { AIToolsPanel } from '@/components/ai/AIToolsPanel'
 
-const DOCLING_API = 'http://localhost:8001'
+const DOCLING_API = 'http://localhost:8001' // TODO: replace with Gemini-based scraper in Phase 32
 
 /* ─── Indra Form Input Style ─── */
 const fieldStyle: React.CSSProperties = {
@@ -49,7 +49,7 @@ function JobFormModal({ job, onClose, prefill }: { job?: Job; onClose: () => voi
     if (isEdit && job) {
       dispatch({ type: 'UPDATE_JOB', payload: { ...job, ...form, appliedDate: new Date(form.appliedDate).toISOString() } })
     } else {
-      dispatch({ type: 'ADD_JOB', payload: { ...form, appliedDate: new Date(form.appliedDate).toISOString() } })
+      dispatch({ type: 'ADD_JOB', payload: { ...form, comments: [], appliedDate: new Date(form.appliedDate).toISOString() } })
     }
     onClose()
   }
@@ -286,7 +286,11 @@ export function JobsPage() {
             </thead>
             <tbody>
               {filteredJobs.map(job => (
-                <tr key={job.id}>
+                <tr key={job.id} style={{ cursor: 'pointer', transition: 'background 0.15s' }}
+                  onClick={() => (window as any).__jobflow_viewJob?.(job.id)}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,176,189,0.04)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                >
                   <td>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                       <div style={{
@@ -311,7 +315,7 @@ export function JobsPage() {
                     {new Date(job.appliedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                   </td>
                   <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }} onClick={e => e.stopPropagation()}>
                       <button onClick={() => setAiJob(job)} style={{ background: 'none', border: 'none', color: '#00B0BD', cursor: 'pointer', padding: '6px' }} title="AI Assistant"><Sparkles size={14} /></button>
                       <button onClick={() => handleEdit(job)} style={{ background: 'none', border: 'none', color: '#7A9CAE', cursor: 'pointer', padding: '6px' }} title="Edit"><Pencil size={14} /></button>
                       <button onClick={() => handleDelete(job)} style={{ background: 'none', border: 'none', color: '#E91E63', cursor: 'pointer', padding: '6px' }} title="Delete"><Trash2 size={14} /></button>

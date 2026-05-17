@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobFlow Mobile - Design System Options</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #111827; color: #fff; padding: 2rem; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        
+        /* Device frame */
+        .device-frame {
+            width: 375px;
+            height: 812px;
+            border-radius: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            position: relative;
+            border: 8px solid #374151;
+            flex-shrink: 0;
+        }
+
+        /* Option 1: Emerald Executive (Current Web App style) */
+        .theme-emerald { background-color: #0F1117; }
+        .theme-emerald .glass { 
+            background: rgba(30, 41, 59, 0.5); 
+            backdrop-filter: blur(12px); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+        }
+        .theme-emerald .accent { color: #10B981; }
+        .theme-emerald .bg-accent { background-color: #10B981; }
+        .theme-emerald .gradient-text { 
+            background: linear-gradient(90deg, #10B981, #3B82F6); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+
+        /* Option 2: Obsidian Elite (Ultra Luxury) */
+        .theme-obsidian { background-color: #000000; }
+        .theme-obsidian .glass { 
+            background: #0A0A0A; 
+            border: 1px solid #262626; 
+            border-radius: 4px; /* Sharper edges */
+        }
+        .theme-obsidian .accent { color: #D4AF37; } /* Gold */
+        .theme-obsidian .bg-accent { background-color: #D4AF37; color: #000; }
+        .theme-obsidian .gradient-text { 
+            background: linear-gradient(90deg, #D4AF37, #FDE047); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+
+        /* Option 3: Sapphire Boardroom (Modern Tech) */
+        .theme-sapphire { background-color: #0B1120; }
+        .theme-sapphire .glass { 
+            background: rgba(15, 23, 42, 0.7); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid rgba(56, 189, 248, 0.2); 
+            box-shadow: inset 0 0 20px rgba(56, 189, 248, 0.05);
+        }
+        .theme-sapphire .accent { color: #38BDF8; }
+        .theme-sapphire .bg-accent { background-color: #38BDF8; color: #0B1120;}
+        .theme-sapphire .gradient-text { 
+            background: linear-gradient(90deg, #38BDF8, #818CF8); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold mb-2">JobFlow Mobile</h1>
+        <p class="text-gray-400 mb-10">Fortune 500 Premium Design Options. Open this file in your browser to view.</p>
+
+        <div class="flex flex-col xl:flex-row gap-10 overflow-x-auto pb-10 items-center xl:items-start justify-center">
+
+            <!-- OPTION 1 -->
+            <div>
+                <h2 class="text-xl font-semibold mb-1 text-center">1. Emerald Executive</h2>
+                <p class="text-sm text-gray-500 mb-4 text-center">Familiar, Glassmorphic, Trustworthy</p>
+                <div class="device-frame theme-emerald">
+                    <div class="p-6 h-full flex flex-col">
+                        <!-- Header -->
+                        <div class="flex justify-between items-center mb-8 mt-4">
+                            <div>
+                                <p class="text-xs text-gray-400 uppercase tracking-wider font-semibold">Welcome back</p>
+                                <h3 class="text-xl font-bold gradient-text">Manoel Benicio</h3>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">MB</div>
+                        </div>
+
+                        <!-- Main KPI -->
+                        <div class="glass rounded-2xl p-5 mb-6 relative overflow-hidden">
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500 opacity-10 rounded-full blur-2xl -mr-10 -mt-10"></div>
+                            <h4 class="text-sm text-gray-400 mb-1">Market Dominance</h4>
+                            <div class="flex items-end gap-2">
+                                <span class="text-4xl font-bold font-mono">87</span>
+                                <span class="text-emerald-500 font-semibold mb-1">+2%</span>
+                            </div>
+                            <div class="w-full bg-gray-800 h-1.5 mt-4 rounded-full overflow-hidden">
+                                <div class="bg-gradient-to-r from-emerald-500 to-blue-500 w-[87%] h-full"></div>
+                            </div>
+                        </div>
+
+                        <!-- List -->
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="font-semibold">Active Pipelines</h4>
+                            <span class="text-xs text-emerald-500 cursor-pointer">View All</span>
+                        </div>
+
+                        <div class="flex-1 space-y-3">
+                            <div class="glass rounded-xl p-4 flex justify-between items-center">
+                                <div>
+                                    <h5 class="font-semibold text-sm">VP of Engineering</h5>
+                                    <p class="text-xs text-gray-400">Microsoft • Seattle</p>
+                                </div>
+                                <div class="bg-gray-800 text-xs px-2 py-1 rounded-md border border-gray-700 font-mono">Interview</div>
+                            </div>
+                            <div class="glass rounded-xl p-4 flex justify-between items-center">
+                                <div>
+                                    <h5 class="font-semibold text-sm">CTO</h5>
+                                    <p class="text-xs text-gray-400">Stripe • Remote</p>
+                                </div>
+                                <div class="bg-gray-800 text-xs px-2 py-1 rounded-md border border-gray-700 font-mono">Applied</div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Nav -->
+                        <div class="glass rounded-full py-4 px-6 flex justify-between items-center mt-auto mb-2">
+                            <div class="accent"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></div>
+                            <div class="text-gray-500"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg></div>
+                            <div class="bg-accent rounded-full p-3 shadow-lg shadow-emerald-500/30 text-white"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></div>
+                            <div class="text-gray-500"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div>
+                            <div class="text-gray-500"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OPTION 2 -->
+            <div>
+                <h2 class="text-xl font-semibold mb-1 text-center">2. Obsidian Elite</h2>
+                <p class="text-sm text-gray-500 mb-4 text-center">Ultra-minimalist, Luxury, Assertive</p>
+                <div class="device-frame theme-obsidian">
+                    <div class="p-6 h-full flex flex-col">
+                        <!-- Header -->
+                        <div class="flex justify-between items-center mb-8 mt-4">
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase tracking-widest font-bold">PORTFOLIO</p>
+                                <h3 class="text-2xl font-light tracking-wide text-white">Benicio</h3>
+                            </div>
+                            <div class="w-10 h-10 border border-gray-600 flex items-center justify-center"><span class="text-xs">MB</span></div>
+                        </div>
+
+                        <!-- Main KPI -->
+                        <div class="glass p-6 mb-6">
+                            <h4 class="text-xs uppercase tracking-widest text-gray-500 mb-4">DOMINANCE INDEX</h4>
+                            <div class="flex items-end gap-2 border-b border-gray-800 pb-4">
+                                <span class="text-5xl font-light font-mono text-white">87<span class="text-2xl text-gray-600">.0</span></span>
+                                <span class="text-yellow-600 text-sm tracking-widest mb-1">▲ 2.1%</span>
+                            </div>
+                            <div class="mt-4 flex justify-between text-xs font-mono text-gray-500">
+                                <span>MARKET: BULL</span>
+                                <span class="text-white">TOP 1%</span>
+                            </div>
+                        </div>
+
+                        <!-- List -->
+                        <div class="flex justify-between items-center mb-4 border-b border-gray-900 pb-2">
+                            <h4 class="text-xs uppercase tracking-widest text-gray-400">ACTIVE POSITIONS</h4>
+                            <span class="text-[10px] uppercase tracking-widest text-yellow-600">VIEW ARCHIVE</span>
+                        </div>
+
+                        <div class="flex-1 space-y-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h5 class="font-normal text-white text-sm tracking-wide">VP of Engineering</h5>
+                                    <p class="text-xs text-gray-600 font-mono mt-1">MSFT // SEA</p>
+                                </div>
+                                <div class="text-[10px] tracking-widest text-white border border-gray-700 px-2 py-1">PHASE 3</div>
+                            </div>
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h5 class="font-normal text-white text-sm tracking-wide">Chief Tech Officer</h5>
+                                    <p class="text-xs text-gray-600 font-mono mt-1">STRP // RMT</p>
+                                </div>
+                                <div class="text-[10px] tracking-widest text-gray-500 border border-gray-800 px-2 py-1">PHASE 1</div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Nav -->
+                        <div class="border-t border-gray-800 py-4 flex justify-between items-center mt-auto mb-2 px-2">
+                            <div class="text-white"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></div>
+                            <div class="text-gray-600"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg></div>
+                            <div class="text-yellow-600"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></div>
+                            <div class="text-gray-600"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div>
+                            <div class="text-gray-600"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OPTION 3 -->
+            <div>
+                <h2 class="text-xl font-semibold mb-1 text-center">3. Sapphire Boardroom</h2>
+                <p class="text-sm text-gray-500 mb-4 text-center">Tech-Forward, Data-Dense, Vibrant</p>
+                <div class="device-frame theme-sapphire">
+                    <div class="p-6 h-full flex flex-col">
+                        <!-- Header -->
+                        <div class="flex justify-between items-center mb-6 mt-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-sky-500/20 flex items-center justify-center border border-sky-500/50 text-sky-400">MB</div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-white leading-tight">Manoel Benicio</h3>
+                                    <p class="text-xs text-sky-400 font-mono">STATUS: ONLINE</p>
+                                </div>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center border border-slate-700 relative">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                                <div class="absolute top-0 right-0 w-2 h-2 bg-sky-400 rounded-full shadow-[0_0_8px_rgba(56,189,248,1)]"></div>
+                            </div>
+                        </div>
+
+                        <!-- Main KPI -->
+                        <div class="glass rounded-2xl p-5 mb-5 border-l-4 border-l-sky-400">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="text-xs text-slate-400 font-mono">DOMINANCE PROBABILITY</h4>
+                                <div class="bg-sky-500/20 text-sky-400 text-[10px] px-2 py-0.5 rounded font-mono border border-sky-500/30">HIGH</div>
+                            </div>
+                            <div class="flex items-end gap-3">
+                                <span class="text-5xl font-bold text-white tracking-tighter">87%</span>
+                                <div class="mb-1 text-sky-400 flex items-center gap-1 text-sm">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+                                    2.4%
+                                </div>
+                            </div>
+                            <!-- Mini chart mock -->
+                            <div class="flex items-end h-8 gap-1 mt-4">
+                                <div class="bg-slate-700 w-full rounded-sm h-[40%]"></div>
+                                <div class="bg-slate-700 w-full rounded-sm h-[30%]"></div>
+                                <div class="bg-slate-700 w-full rounded-sm h-[50%]"></div>
+                                <div class="bg-sky-900 w-full rounded-sm h-[70%]"></div>
+                                <div class="bg-sky-400 w-full rounded-sm h-[90%] shadow-[0_0_10px_rgba(56,189,248,0.5)]"></div>
+                            </div>
+                        </div>
+
+                        <!-- List -->
+                        <div class="flex justify-between items-center mb-3">
+                            <h4 class="text-sm font-bold text-slate-300">Target Intel</h4>
+                            <span class="text-[10px] uppercase bg-slate-800 px-2 py-1 rounded-md text-slate-400">Filter</span>
+                        </div>
+
+                        <div class="flex-1 space-y-3">
+                            <div class="glass rounded-xl p-3 border-l-2 border-l-purple-500 flex justify-between items-center">
+                                <div>
+                                    <h5 class="font-bold text-sm text-white">VP of Engineering</h5>
+                                    <p class="text-xs text-slate-400 font-mono mt-0.5">Microsoft</p>
+                                </div>
+                                <div class="flex flex-col items-end">
+                                    <span class="text-xs text-purple-400 font-bold mb-1">INTERVIEW</span>
+                                    <span class="text-[10px] text-slate-500 font-mono">IN 2 DAYS</span>
+                                </div>
+                            </div>
+                            <div class="glass rounded-xl p-3 border-l-2 border-l-slate-600 flex justify-between items-center">
+                                <div>
+                                    <h5 class="font-bold text-sm text-white">CTO</h5>
+                                    <p class="text-xs text-slate-400 font-mono mt-0.5">Stripe</p>
+                                </div>
+                                <div class="flex flex-col items-end">
+                                    <span class="text-xs text-slate-400 font-bold mb-1">APPLIED</span>
+                                    <span class="text-[10px] text-slate-500 font-mono">1 WK AGO</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Nav -->
+                        <div class="glass rounded-2xl py-3 px-6 flex justify-between items-center mt-auto mb-2 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-r from-sky-500/10 to-transparent w-1/4"></div>
+                            <div class="text-sky-400 relative z-10 drop-shadow-[0_0_8px_rgba(56,189,248,0.8)]"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></div>
+                            <div class="text-slate-500 relative z-10"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg></div>
+                            <div class="bg-sky-500 text-slate-900 rounded-xl p-2.5 relative z-10 shadow-[0_0_15px_rgba(56,189,248,0.5)]"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></div>
+                            <div class="text-slate-500 relative z-10"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div>
+                            <div class="text-slate-500 relative z-10"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

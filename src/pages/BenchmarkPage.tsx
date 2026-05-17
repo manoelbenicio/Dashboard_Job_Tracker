@@ -7,9 +7,10 @@ import { parseUploadedCV } from '@/lib/resumeService'
 import { runFullBenchmark, runPhase7, runPhase8, PHASE_NAMES, type BenchmarkInput, type BenchmarkResult, type PhaseProgress } from '@/lib/benchmarkEngine'
 import type { AIProviderConfig } from '@/lib/aiProviders'
 import { useRef } from 'react'
+import { loadResume } from '@/lib/storage'
 
 export function BenchmarkPage() {
-  const { state } = useJobs()
+  const { state, userUid } = useJobs()
   const apiKey = state.profile.apiKey
   const openaiApiKey = state.profile.openaiApiKey || ''
   const aiConfig: AIProviderConfig = {
@@ -42,10 +43,10 @@ export function BenchmarkPage() {
     } else { setError(parsed.error || 'Falha ao processar CV') }
   }
 
-  const useResumeBuilder = () => {
-    const saved = localStorage.getItem('jobflow-resume')
+  const useResumeBuilder = async () => {
+    const saved = await loadResume(userUid)
     if (!saved) return
-    const r = JSON.parse(saved)
+    const r = saved
     setCvText([`# ${r.fullName}`, r.title, '', r.summary, '', '## Experience', ...(r.experience || []).map((x: any) => `### ${x.role} — ${x.company}\n${x.period}\n${(x.bullets || []).join('\n')}`), '', '## Skills', (r.skills || []).join(', ')].join('\n'))
     setCvFileName('Resume Builder')
   }

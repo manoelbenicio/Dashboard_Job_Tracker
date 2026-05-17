@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3. Indra Glass</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--deep:#002B3A;--dark:#003E50;--primary:#06596E;--secondary:#346679;--cyan:#00B0BD;--teal:#3F96AE;--light:#7A9CAE;--sky:#BADFF3;--success:#27AE60;--warning:#FF9800;--error:#E91E63;--gold:#FFC107}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#0a0e14;min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:24px}
+.label{text-align:center;margin-bottom:16px}.label h2{color:#fff;font-size:22px}.label p{color:var(--light);font-size:13px}
+.phone{width:375px;height:812px;border-radius:44px;border:6px solid #1a2332;overflow:hidden;position:relative;box-shadow:0 30px 60px rgba(0,0,0,.6);background:var(--deep);background-image:radial-gradient(ellipse at 30% 20%,rgba(0,176,189,.12) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(63,150,174,.08) 0%,transparent 50%)}
+.notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:150px;height:34px;background:#1a2332;border-radius:0 0 20px 20px;z-index:10}
+.screen{padding:48px 20px 100px;height:100%;overflow-y:auto;scrollbar-width:none}.screen::-webkit-scrollbar{display:none}
+
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.brand{font-size:18px;font-weight:300;color:#fff;letter-spacing:-.01em}.brand b{font-weight:700;color:var(--cyan)}
+.notif{width:36px;height:36px;border-radius:12px;background:rgba(0,62,80,.6);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:14px;position:relative;cursor:pointer}
+.notif-dot{position:absolute;top:6px;right:6px;width:6px;height:6px;background:var(--error);border-radius:50%;box-shadow:0 0 6px var(--error)}
+
+/* Glass hero */
+.glass-hero{background:rgba(0,62,80,.5);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:24px;margin-bottom:16px;position:relative;overflow:hidden}
+.glass-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:radial-gradient(circle,rgba(0,176,189,.2),transparent 70%);border-radius:50%}
+.glass-hero .eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);font-weight:600;margin-bottom:12px}
+.glass-hero .big-num{font-family:'JetBrains Mono',monospace;font-size:56px;font-weight:700;color:#fff;line-height:1}
+.glass-hero .big-label{font-size:12px;color:var(--light);margin-top:4px}
+.glass-hero .pill-row{display:flex;gap:8px;margin-top:14px}
+.glass-hero .pill{font-size:10px;font-weight:600;padding:4px 10px;border-radius:99px;display:flex;align-items:center;gap:4px}
+.pill.green{color:var(--success);background:rgba(39,174,96,.12)}.pill.gold{color:var(--gold);background:rgba(255,193,7,.12)}
+
+/* Mini glass cards */
+.glass-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.glass-mini{background:rgba(0,62,80,.4);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:16px;text-align:center}
+.glass-mini .gm-val{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;color:#fff}
+.glass-mini .gm-label{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--light);font-weight:600;margin-top:4px}
+.glass-mini .gm-bar{height:4px;background:var(--secondary);border-radius:2px;margin-top:10px;overflow:hidden}
+.glass-mini .gm-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--cyan),var(--teal))}
+
+/* Action cards */
+.act-title{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--light);font-weight:700;margin-bottom:12px}
+.act-card{background:rgba(0,62,80,.35);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.act-left{display:flex;align-items:center;gap:12px}
+.act-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.act-icon.ai{background:rgba(0,176,189,.15);color:var(--cyan)}
+.act-icon.doc{background:rgba(255,193,7,.12);color:var(--gold)}
+.act-icon.cal{background:rgba(39,174,96,.12);color:var(--success)}
+.act-name{font-size:13px;font-weight:600;color:#fff}
+.act-sub{font-size:10px;color:var(--light);margin-top:1px}
+.act-arrow{color:var(--secondary);font-size:16px}
+
+/* FAB */
+.fab{position:absolute;bottom:92px;right:24px;width:56px;height:56px;border-radius:16px;background:var(--cyan);display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--deep);font-weight:300;box-shadow:0 8px 24px rgba(0,176,189,.4);z-index:5;cursor:pointer}
+
+.bottom-nav{position:absolute;bottom:0;left:0;right:0;height:80px;background:rgba(0,43,58,.9);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-around;align-items:center;padding-bottom:16px}
+.nav-i{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--light);font-size:9px;font-weight:500}.nav-i.active{color:var(--cyan)}.nav-i .ic{font-size:18px}
+</style>
+</head><body>
+<div>
+<div class="label"><h2>3. Indra Glass</h2><p>Deep Glassmorphism • Layered Depth • Radial Glow</p></div>
+<div class="phone"><div class="notch"></div><div class="screen">
+
+<div class="header">
+<div class="brand">Job<b>Flow</b></div>
+<div class="notif">🔔<div class="notif-dot"></div></div>
+</div>
+
+<div class="glass-hero">
+<div class="eyebrow">DOMINANCE PROBABILITY</div>
+<div class="big-num"><span data-count="87">0</span><span style="font-size:24px;color:var(--teal);font-weight:300">%</span></div>
+<div class="big-label">Global Executive Ranking — Top 1%</div>
+<div class="pill-row"><div class="pill green">● Top Performer</div><div class="pill gold">★ 3 Offers Active</div></div>
+</div>
+
+<div class="glass-grid">
+<div class="glass-mini"><div class="gm-val" data-count="847">0</div><div class="gm-label">APPLICATIONS</div><div class="gm-bar"><div class="gm-fill" style="width:85%"></div></div></div>
+<div class="glass-mini"><div class="gm-val" data-count="34" data-suffix="%">0%</div><div class="gm-label">RESPONSE RATE</div><div class="gm-bar"><div class="gm-fill" style="width:34%"></div></div></div>
+<div class="glass-mini"><div class="gm-val" data-count="12">0</div><div class="gm-label">INTERVIEWS</div><div class="gm-bar"><div class="gm-fill" style="width:60%"></div></div></div>
+<div class="glass-mini"><div class="gm-val" data-count="301" data-suffix="ms">0ms</div><div class="gm-label">AVG RESPONSE</div><div class="gm-bar"><div class="gm-fill" style="width:40%"></div></div></div>
+</div>
+
+<div class="act-title">QUICK ACTIONS</div>
+<div class="act-card"><div class="act-left"><div class="act-icon ai">🤖</div><div><div class="act-name">Ask Claire AI</div><div class="act-sub">Career coaching & strategy</div></div></div><div class="act-arrow">›</div></div>
+<div class="act-card"><div class="act-left"><div class="act-icon doc">📄</div><div><div class="act-name">Resume Builder</div><div class="act-sub">AI-optimized formatting</div></div></div><div class="act-arrow">›</div></div>
+<div class="act-card"><div class="act-left"><div class="act-icon cal">📊</div><div><div class="act-name">Benchmark Engine</div><div class="act-sub">8-phase competitive analysis</div></div></div><div class="act-arrow">›</div></div>
+
+</div>
+<div class="fab">+</div>
+<div class="bottom-nav">
+<div class="nav-i active"><div class="ic">◻</div>Home</div>
+<div class="nav-i"><div class="ic">☰</div>Pipeline</div>
+<div class="nav-i" style="width:56px"></div>
+<div class="nav-i"><div class="ic">💬</div>Claire</div>
+<div class="nav-i"><div class="ic">👤</div>Profile</div>
+</div>
+</div></div>
+
+<script>
+function ac(el,t,s){const st=performance.now(),d=1800;function tk(n){const p=Math.min((n-st)/d,1),e=1-Math.pow(1-p,3);el.textContent=Math.round(t*e).toLocaleString()+s;if(p<1)requestAnimationFrame(tk)}requestAnimationFrame(tk)}
+document.querySelectorAll('[data-count]').forEach(el=>{const t=parseInt(el.dataset.count),s=el.dataset.suffix||'';ac(el,t,s)});
+</script>
+</body></html>

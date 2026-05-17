@@ -1,5 +1,7 @@
 import { Job, UserProfile, DEFAULT_PROFILE } from '@/types'
 import { generateId } from '@/lib/utils'
+import { db } from '@/lib/firebase'
+import { doc, getDoc, setDoc, collection, getDocs, writeBatch } from 'firebase/firestore'
 
 const STORAGE_KEYS = {
   theme: 'jobflow-theme',
@@ -10,34 +12,93 @@ function userKey(base: string, uid?: string) {
   return uid ? `jobflow-${uid}-${base}` : `jobflow-${base}`
 }
 
-/** Load jobs from LocalStorage (scoped per user) */
-export function loadJobs(uid?: string): Job[] {
+/** Load jobs from Firestore (scoped per user) */
+export async function loadJobs(uid?: string): Promise<Job[]> {
+  if (!uid) return getSeedJobs()
   try {
-    const raw = localStorage.getItem(userKey('jobs', uid))
-    return raw ? JSON.parse(raw) : getSeedJobs()
-  } catch {
+    const jobsRef = collection(db, `users/${uid}/jobs`)
+    const snapshot = await getDocs(jobsRef)
+    if (snapshot.empty) {
+      // First time? Let's seed.
+      const seeds = getSeedJobs()
+      await saveJobs(seeds, uid)
+      return seeds
+    }
+    return snapshot.docs.map(d => d.data() as Job)
+  } catch (error) {
+    console.error('Error loading jobs:', error)
     return getSeedJobs()
   }
 }
 
-/** Save jobs to LocalStorage */
-export function saveJobs(jobs: Job[], uid?: string): void {
-  localStorage.setItem(userKey('jobs', uid), JSON.stringify(jobs))
+/** Save jobs to Firestore */
+export async function saveJobs(jobs: Job[], uid?: string): Promise<void> {
+  if (!uid) return
+  try {
+    const batch = writeBatch(db)
+    const jobsRef = collection(db, `users/${uid}/jobs`)
+    jobs.forEach(job => {
+      const jobDoc = doc(jobsRef, job.id)
+      batch.set(jobDoc, job)
+    })
+    await batch.commit()
+  } catch (error) {
+    console.error('Error saving jobs:', error)
+  }
 }
 
-/** Load user profile */
-export function loadProfile(uid?: string): UserProfile {
+/** Load user profile from Firestore */
+export async function loadProfile(uid?: string): Promise<UserProfile> {
+  if (!uid) return DEFAULT_PROFILE
   try {
-    const raw = localStorage.getItem(userKey('profile', uid))
-    return raw ? JSON.parse(raw) : DEFAULT_PROFILE
-  } catch {
+    const profileRef = doc(db, `users/${uid}/profile/data`)
+    const snap = await getDoc(profileRef)
+    if (snap.exists()) {
+      return snap.data() as UserProfile
+    }
+    return DEFAULT_PROFILE
+  } catch (error) {
+    console.error('Error loading profile:', error)
     return DEFAULT_PROFILE
   }
 }
 
-/** Save user profile */
-export function saveProfile(profile: UserProfile, uid?: string): void {
-  localStorage.setItem(userKey('profile', uid), JSON.stringify(profile))
+/** Save user profile to Firestore */
+export async function saveProfile(profile: UserProfile, uid?: string): Promise<void> {
+  if (!uid) return
+  try {
+    const profileRef = doc(db, `users/${uid}/profile/data`)
+    await setDoc(profileRef, profile)
+  } catch (error) {
+    console.error('Error saving profile:', error)
+  }
+}
+
+/** Load resume from Firestore */
+export async function loadResume(uid?: string): Promise<any | null> {
+  if (!uid) return null
+  try {
+    const resumeRef = doc(db, `users/${uid}/resume/data`)
+    const snap = await getDoc(resumeRef)
+    if (snap.exists()) {
+      return snap.data()
+    }
+    return null
+  } catch (error) {
+    console.error('Error loading resume:', error)
+    return null
+  }
+}
+
+/** Save resume to Firestore */
+export async function saveResume(resume: any, uid?: string): Promise<void> {
+  if (!uid) return
+  try {
+    const resumeRef = doc(db, `users/${uid}/resume/data`)
+    await setDoc(resumeRef, resume)
+  } catch (error) {
+    console.error('Error saving resume:', error)
+  }
 }
 
 /** Export all data as JSON string */
@@ -76,7 +137,7 @@ function getSeedJobs(): Job[] {
       origin: 'application',
       notes: 'Second round technical interview scheduled for Thursday.',
       coverLetter: '',
-      interviewGuide: '',
+      interviewGuide: '', comments: [],
       appliedDate: daysAgo(12),
       lastUpdated: daysAgo(0),
       createdAt: daysAgo(12),
@@ -93,7 +154,7 @@ function getSeedJobs(): Job[] {
       origin: 'referral',
       notes: 'Customized resume. Transcript of PDF attached to application.',
       coverLetter: '',
-      interviewGuide: '',
+      interviewGuide: '', comments: [],
       appliedDate: daysAgo(5),
       lastUpdated: daysAgo(0),
       createdAt: daysAgo(5),
@@ -110,7 +171,7 @@ function getSeedJobs(): Job[] {
       origin: 'recruiter',
       notes: 'Final round confirmation received. Waiting for digital contract.',
       coverLetter: '',
-      interviewGuide: '',
+      interviewGuide: '', comments: [],
       appliedDate: daysAgo(21),
       lastUpdated: daysAgo(1),
       createdAt: daysAgo(21),
@@ -127,7 +188,7 @@ function getSeedJobs(): Job[] {
       origin: 'application',
       notes: 'System design round scheduled next week.',
       coverLetter: '',
-      interviewGuide: '',
+      interviewGuide: '', comments: [],
       appliedDate: daysAgo(8),
       lastUpdated: daysAgo(2),
       createdAt: daysAgo(8),
@@ -144,7 +205,7 @@ function getSeedJobs(): Job[] {
       origin: 'application',
       notes: 'Applied via website. Strong match for background.',
       coverLetter: '',
-      interviewGuide: '',
+      interviewGuide: '', comments: [],
       appliedDate: daysAgo(3),
       lastUpdated: daysAgo(3),
       createdAt: daysAgo(3),
@@ -161,7 +222,7 @@ function getSeedJobs(): Job[] {
       origin: 'application',
       notes: 'Received rejection after phone screen. Position filled internally.',
       coverLetter: '',
-      interviewGuide: '',
+      interviewGuide: '', comments: [],
       appliedDate: daysAgo(30),
       lastUpdated: daysAgo(15),
       createdAt: daysAgo(30),
@@ -178,7 +239,7 @@ function getSeedJobs(): Job[] {
       origin: 'recruiter',
       notes: 'Recruiter reached out. First interview completed.',
       coverLetter: '',
-      interviewGuide: '',
+      interviewGuide: '', comments: [],
       appliedDate: daysAgo(10),
       lastUpdated: daysAgo(4),
       createdAt: daysAgo(10),
@@ -195,7 +256,7 @@ function getSeedJobs(): Job[] {
       origin: 'application',
       notes: 'Applied last week. Awaiting response.',
       coverLetter: '',
-      interviewGuide: '',
+      interviewGuide: '', comments: [],
       appliedDate: daysAgo(7),
       lastUpdated: daysAgo(7),
       createdAt: daysAgo(7),
@@ -212,7 +273,7 @@ function getSeedJobs(): Job[] {
       origin: 'referral',
       notes: 'Offer accepted! Start date confirmed for next month.',
       coverLetter: '',
-      interviewGuide: '',
+      interviewGuide: '', comments: [],
       appliedDate: daysAgo(45),
       lastUpdated: daysAgo(3),
       createdAt: daysAgo(45),
