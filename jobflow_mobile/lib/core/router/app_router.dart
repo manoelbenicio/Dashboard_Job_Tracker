@@ -10,6 +10,8 @@ import '../../features/jobs/add_job_screen.dart';
 import '../../features/jobs/job_detail_screen.dart';
 import '../../features/kanban/kanban_screen.dart';
 import '../../features/analytics/analytics_screen.dart';
+import '../../features/resume/resume_builder_screen.dart';
+import '../../features/benchmark/benchmark_screen.dart';
 /// Listenable that notifies GoRouter when auth state changes
 class AuthNotifier extends ChangeNotifier {
   late final StreamSubscription<User?> _sub;
@@ -74,6 +76,16 @@ final appRouter = GoRouter(
       path: '/analytics',
       name: 'analytics',
       builder: (context, state) => const AnalyticsScreen(),
+    ),
+    GoRoute(
+      path: '/resume',
+      name: 'resume',
+      builder: (context, state) => const ResumeBuilderScreen(),
+    ),
+    GoRoute(
+      path: '/benchmark',
+      name: 'benchmark',
+      builder: (context, state) => const BenchmarkScreen(),
     ),
     // Job Detail — open a specific job by ID
     GoRoute(

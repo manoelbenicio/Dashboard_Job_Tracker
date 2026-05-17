@@ -19,9 +19,9 @@ class AdaptiveShell extends StatelessWidget {
   static const _destinations = [
     _NavItem(icon: Icons.grid_view, label: 'Painel'),
     _NavItem(icon: Icons.auto_awesome, label: 'Claire'),
-    _NavItem(icon: Icons.add_circle_outline, label: 'Novo'),
     _NavItem(icon: Icons.view_kanban, label: 'Kanban'),
-    _NavItem(icon: Icons.settings, label: 'Config'),
+    _NavItem(icon: Icons.analytics_outlined, label: 'Analytics'),
+    _NavItem(icon: Icons.more_horiz, label: 'More'),
   ];
 
   @override
